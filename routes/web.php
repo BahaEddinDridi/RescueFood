@@ -6,6 +6,7 @@ use App\Http\Controllers\DemandeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\InventaireBeneficiaireController;
 use App\Http\Controllers\ProduitAlimentaireController;
+use App\Http\Controllers\CertificationController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\DonController;
@@ -66,6 +67,7 @@ Route::middleware('auth')->group(function () {
          ->name('produitAlimentaire.mesProduits');
 });
 
+Route::resource('certifications', CertificationController::class);
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
