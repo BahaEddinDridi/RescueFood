@@ -23,8 +23,7 @@ use App\Http\Controllers\Admin\ProduitAdminController;
 use App\Http\Controllers\Admin\DonAdminController;
 use App\Http\Controllers\Admin\ReservationAdminController;
 use App\Http\Controllers\Admin\FeedbackAdminController;
-/**** */
-use App\Http\Controllers\SPARQL\CertificationspqlController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -101,5 +100,4 @@ Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show')
 Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
 Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
 
-/*** */
-Route::resource('certificats', CertificationspqlController::class);
+
