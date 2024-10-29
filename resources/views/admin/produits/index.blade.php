@@ -12,6 +12,7 @@
                     <th class="d-none d-xl-table-cell">Date de Péremption</th>
                     <th class="d-none d-xl-table-cell">Type</th>
                     <th class="d-none d-md-table-cell">Image</th>
+                    <th class="d-none d-md-table-cell">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -28,11 +29,28 @@
                             <img src="{{ asset($produit->image_url) }}" alt="{{ $produit->nom }}" 
                                  style="width: 50px; height: 50px; object-fit: cover;">
                         </td>
-                      
+                        <td>
+                            @if($produit->approuve)
+                                <span class="text-success">Approuvé</span>
+                               
+                            @else
+                                <form action="{{ route('admin.produitAlimentaire.approuver', $produit->id) }}" method="POST" style="display: inline;" onsubmit="return confirmApproval();">
+                                    @csrf
+                                    @method('PATCH')
+                                    <button type="submit" class="btn btn-success btn-approve">Approuver</button>
+                                </form>
+                            @endif
+                        </td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
     </div>
 </div>
+
+<script>
+    function confirmApproval() {
+        return confirm("Êtes-vous sûr de vouloir approuver ce produit ?");
+    }
+</script>
 @endsection

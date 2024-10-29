@@ -4,6 +4,12 @@
 <div class="p-4 mb-5" data-wow-delay="0.1s" style="margin-top: 100px;">
     <h1 class="text-center">Ajouter un produit</h1>
 
+    @if (session('waiting_for_approval'))
+        <div class="alert alert-warning">
+            {{ session('waiting_for_approval') }}
+        </div>
+    @endif
+
     <form action="{{ route('produitAlimentaire.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         

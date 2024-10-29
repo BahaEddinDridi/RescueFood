@@ -82,6 +82,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::resource('recommendations', RecommendationAdminController::class);
    
     Route::resource('produits', ProduitAdminController::class);
+        // Définir la route d’approbation correctement
+        Route::patch('produits/{id}/approuver', [ProduitAdminController::class, 'approuver'])
+        ->name('produitAlimentaire.approuver');
     Route::resource('dons', DonAdminController::class);
 
     // Reservation resource route

@@ -1,17 +1,20 @@
-{{-- resources/views/produits_alimentaires/index.blade.php --}}
-
 @extends('layouts.app') 
 
-@section('title', 'All Products')
+@section('title', 'Tous les Produits Approuvés')
 
 @section('content')
     <div class="p-4 mb-5" data-wow-delay="0.1s" style="margin-top: 100px;">
-        <h1>Tous les produits</h1>
-
+        <h1>Tous les produits </h1>
 
         @if (session('success'))
             <div class="alert alert-success">
                 {{ session('success') }}
+            </div>
+        @endif
+
+        @if (session('waiting_for_approval'))
+            <div class="alert alert-warning">
+                {{ session('waiting_for_approval') }}
             </div>
         @endif
 
@@ -22,8 +25,7 @@
                     <div class="card border-light shadow-sm">
                         <div class="position-relative">
                             @if (!empty($produit->image_url))
-                            <img src="{{ asset($produit->image_url) }}" alt="{{ $produit->nom }}" class="card-img-top" style="height: 200px; object-fit: cover;">
-
+                                <img src="{{ asset($produit->image_url) }}" alt="{{ $produit->nom }}" class="card-img-top" style="height: 200px; object-fit: cover;">
                             @else
                                 <img src="https://via.placeholder.com/300" alt="Image non disponible" class="card-img-top" style="height: 200px; object-fit: cover;">
                             @endif
@@ -31,7 +33,6 @@
 
                         <div class="card-body text-center">
                             <h5 class="card-title">{{ $produit->nom }}</h5>
-                           
                             <p class="card-text">Type: {{ $produit->type ?? 'Non spécifié' }}</p>
                             <p class="card-text">Quantité: {{ $produit->quantite }}</p>
                             <p class="card-text">Date d'expiration: {{ $produit->date_peremption }}</p>
@@ -40,15 +41,13 @@
                             <a class="btn btn-outline-primary " href="{{ route('produitAlimentaire.show', $produit->id) }}">
                                 <i class="fa fa-eye"></i> View Detail
                             </a>
-                           
-                            
                         </div>
                     </div>
                 </div>
             @endforeach
         </div>
         @else
-            <p>Aucun produit disponible. <a href="{{ route('produitAlimentaire.create') }}">Ajouter un produit maintenant!</a></p>
+            <p>Aucun produit approuvé disponible. <a href="{{ route('produitAlimentaire.create') }}">Ajouter un produit maintenant!</a></p>
         @endif
     </div>
 @endsection

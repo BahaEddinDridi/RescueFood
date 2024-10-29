@@ -1,5 +1,3 @@
-
-
 @extends('layouts.app')
 
 @section('title', 'All Products')
@@ -41,19 +39,25 @@
                                 @if ($produit->categorie)
                                     <p class="card-text">Catégorie: {{ $produit->categorie }}</p>
                                 @endif
+                                
+                                @if (!$produit->approuve)
+                                    <div class="alert alert-warning mt-2">
+                                        Ce produit est en attente d'approbation.
+                                    </div>
+                                @endif
                             </div>
                             <div class="card-footer d-flex justify-content-between">
                                 <a class="btn btn-outline-primary" href="{{ route('produitAlimentaire.show', $produit->id) }}">
-                                    <i class="fa fa-eye"></i> View Detail
+                                    <i class="fa fa-eye"></i> Voir les détails
                                 </a>
                                 <a class="btn btn-outline-warning" href="{{ route('produitAlimentaire.edit', $produit->id) }}">
-                                    <i class="fa fa-edit"></i> Edit
+                                    <i class="fa fa-edit"></i> Éditer
                                 </a>
                                 <form action="{{ route('produitAlimentaire.destroy', $produit->id) }}" method="POST" style="display:inline-block;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" onclick="return confirm('Tu es sûr?')" title="Delete" class="btn btn-outline-danger">
-                                        <i class="fas fa-trash"></i> Delete
+                                    <button type="submit" onclick="return confirm('Tu es sûr?')" title="Supprimer" class="btn btn-outline-danger">
+                                        <i class="fas fa-trash"></i> Supprimer
                                     </button>
                                 </form>
                             </div>
