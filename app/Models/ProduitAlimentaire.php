@@ -20,4 +20,10 @@ class ProduitAlimentaire extends Model
         'image_url',
     ];
 
+      // Relation avec le modèle Certification
+      public function certifications()
+      {
+          return $this->hasMany(Certification::class);
+      }
+
 }

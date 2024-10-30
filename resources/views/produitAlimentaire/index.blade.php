@@ -38,7 +38,7 @@
                             <p class="card-text">Date d'expiration: {{ $produit->date_peremption }}</p>
                         </div>
                         <div class="card-footer d-flex justify-content-between">
-                            <a class="btn btn-outline-primary " href="{{ route('produitAlimentaire.show', $produit->id) }}">
+                            <a class="btn btn-outline-primary rounded-pill " href="{{ route('produitAlimentaire.show', $produit->id) }}">
                                 <i class="fa fa-eye"></i> View Detail
                             </a>
                         </div>

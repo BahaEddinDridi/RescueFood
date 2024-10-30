@@ -47,16 +47,16 @@
                                 @endif
                             </div>
                             <div class="card-footer d-flex justify-content-between">
-                                <a class="btn btn-outline-primary" href="{{ route('produitAlimentaire.show', $produit->id) }}">
+                                <a class="btn btn-outline-primary rounded-pill" href="{{ route('produitAlimentaire.show', $produit->id) }}">
                                     <i class="fa fa-eye"></i> Voir les détails
                                 </a>
-                                <a class="btn btn-outline-warning" href="{{ route('produitAlimentaire.edit', $produit->id) }}">
+                                <a class="btn btn-outline-warning rounded-pill" href="{{ route('produitAlimentaire.edit', $produit->id) }}">
                                     <i class="fa fa-edit"></i> Éditer
                                 </a>
                                 <form action="{{ route('produitAlimentaire.destroy', $produit->id) }}" method="POST" style="display:inline-block;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" onclick="return confirm('Tu es sûr?')" title="Supprimer" class="btn btn-outline-danger">
+                                    <button type="submit" onclick="return confirm('Tu es sûr?')" title="Supprimer" class="btn btn-outline-danger rounded-pill">
                                         <i class="fas fa-trash"></i> Supprimer
                                     </button>
                                 </form>
