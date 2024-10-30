@@ -31,7 +31,9 @@
 
       
     </div>
-
+    <a href="{{ route('certifications.download', $certification->id) }}" class="btn btn-outline-success rounded-pill">
+        <i class="fas fa-download"></i> Télécharger PDF
+    </a>
     <div class="text-center mt-4">
         <a href="{{ route('certifications.index') }}" class="btn btn-outline-secondary rounded-pill">Retour à la liste</a>
     </div>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ProduitAlimentaire;
 use App\Models\Certification;
 use Illuminate\Http\Request;
+use PDF; 
 
 class CertificationController extends Controller
 {
@@ -72,5 +73,15 @@ class CertificationController extends Controller
         $certification->delete();
 
         return redirect()->route('certifications.index')->with('success', 'Certification supprimée avec succès');
+    }
+    public function downloadPDF($id)
+    {
+        $certification = Certification::findOrFail($id); // Find the certification by ID
+
+        // Load a view to generate PDF content
+        $pdf = PDF::loadView('certificats.pdf', compact('certification'));
+
+        // Return the generated PDF
+        return $pdf->download('certificat_' . $certification->nom . '.pdf');
     }
 }

@@ -11,9 +11,18 @@ class ProduitAdminController extends Controller
     // Affichage des produits avec pagination
     public function index()
     {
+        // Récupérer les produits avec pagination
         $produits = ProduitAlimentaire::paginate(10);
-        return view('admin.produits.index', compact('produits'));
+    
+        // Statistiques
+        $totalProduits = ProduitAlimentaire::count();
+        $produitsApprouves = ProduitAlimentaire::where('approuve', true)->count();
+        $produitsEnAttente = ProduitAlimentaire::where('approuve', false)->count();
+       
+    
+        return view('admin.produits.index', compact('produits', 'totalProduits', 'produitsApprouves', 'produitsEnAttente'));
     }
+    
 
     // Approuver un produit spécifique
     public function approuver($id)

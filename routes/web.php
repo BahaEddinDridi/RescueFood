@@ -69,6 +69,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::resource('certifications', CertificationController::class);
+Route::get('/certifications/{id}/download', [CertificationController::class, 'downloadPDF'])->name('certifications.download');
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');

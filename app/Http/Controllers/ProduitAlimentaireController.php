@@ -28,11 +28,21 @@ class ProduitAlimentaireController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $produitAlimentaire = ProduitAlimentaire::where('approuve', true)->get();
+        // Récupérer le terme de recherche depuis la requête
+        $query = $request->input('search');
+    
+        // Filtrer les produits approuvés, avec option de recherche
+        $produitAlimentaire = ProduitAlimentaire::where('approuve', true)
+            ->when($query, function ($queryBuilder) use ($query) {
+                return $queryBuilder->where('nom', 'like', '%' . $query . '%');
+            })
+            ->get();
+    
         return view('produitAlimentaire.index', compact('produitAlimentaire'));
     }
+    
 
     /**
      * Show the form for creating a new product.

@@ -4,7 +4,17 @@
 
 @section('content')
     <div class="p-4 mb-5" data-wow-delay="0.1s" style="margin-top: 100px;">
-        <h1>Tous les produits </h1>
+        <h1>Tous les produits</h1>
+
+        <!-- Formulaire de recherche -->
+        <form method="GET" action="{{ route('produitAlimentaire.index') }}" class="mb-4">
+            <div class="input-group rounded">
+                <input type="search" name="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" value="{{ request()->input('search') }}" />
+                <span class="input-group-text border-0" id="search-addon">
+                    <i class="fas fa-search"></i>
+                </span>
+            </div>
+        </form>
 
         @if (session('success'))
             <div class="alert alert-success">
@@ -38,8 +48,8 @@
                             <p class="card-text">Date d'expiration: {{ $produit->date_peremption }}</p>
                         </div>
                         <div class="card-footer d-flex justify-content-between">
-                            <a class="btn btn-outline-primary rounded-pill " href="{{ route('produitAlimentaire.show', $produit->id) }}">
-                                <i class="fa fa-eye"></i> View Detail
+                            <a class="btn btn-outline-primary rounded-pill" href="{{ route('produitAlimentaire.show', $produit->id) }}">
+                                <i class="fa fa-eye"></i> Voir les détails
                             </a>
                         </div>
                     </div>
