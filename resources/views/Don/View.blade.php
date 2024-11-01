@@ -49,7 +49,7 @@
                     <p class="card-text mb-1"><strong>Date du don:</strong> {{ $item->date_don }}</p>
                     <p class="card-text mb-1"><strong>Date de préremption:</strong> {{ $item->date_peremption }}</p>
                     <p class="card-text mb-1"><strong>Quantité:</strong> {{ $item->quantité }}</p>
-                    <p class="card-text"><strong>Statut:</strong> <span class="badge badge-pill {{ $item->statut === 'Actif' ? 'badge-success' : 'badge-danger' }}">{{ $item->statut }}</span></p>
+                    <p class="card-text mb-1"><strong>Statut:</strong> {{ $item->statut }}</p>
                     
                     <div class="d-flex justify-content-center mt-4">
                         <a href="{{ route('Dons.show', $item->id) }}" class="btn btn-outline-warning btn-sm mx-1">Voir</a>
