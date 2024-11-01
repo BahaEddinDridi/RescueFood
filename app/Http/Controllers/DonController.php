@@ -13,10 +13,11 @@ class DonController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        $don  = Don::all();
-        return view ('Don.View',compact('don'));
-    }
+{
+    $don = Don::paginate(6);
+    return view('Don.View', compact('don'));
+}
+
 
     /**
      * Show the form for creating a new resource.
