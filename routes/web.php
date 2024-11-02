@@ -41,7 +41,28 @@ Route::resource('recommendations', RecommendationController::class);
 Route::resource('events', EventController::class);
 Route::resource('feedbacks', FeedbackController::class);
 Route::resource('Dons', DonController::class);
+
+
+
+
+
 Route::resource('invertaireDonateurs', InventaireDonateurController::class);
+
+Route::get('/invertaireDonateurs/produits/{userId}', [InventaireDonateurController::class, 'getProduitsAlimentaires'])
+    ->name('invertaireDonateurs.produits');
+
+Route::post('/invertaireDonateurs/addSelectedProduits', [InventaireDonateurController::class, 'addSelectedProduits'])
+    ->name('invertaireDonateurs.addSelectedProduits');
+
+    Route::get('invertaireDonateurs/detail/{id}/{userId}', [InventaireDonateurController::class, 'show'])
+    ->name('invertaireDonateurs.show');
+
+
+    Route::get('invertaireDonateurs/edit/{id}/{userId}', [InventaireDonateurController::class, 'edit'])
+    ->name('invertaireDonateurs.edit');
+
+
+
 
 
 Route::get('/', function () {

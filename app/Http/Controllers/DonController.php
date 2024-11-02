@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Don;
+use Illuminate\Support\Facades\Auth;
 
 class DonController extends Controller
 {
@@ -13,10 +14,10 @@ class DonController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-{
-    $don = Don::paginate(6);
-    return view('Don.View', compact('don'));
-}
+    {
+        $don = Don::where('user_id', Auth::id())->paginate(6); // Modifiez cette ligne
+        return view('Don.View', compact('don'));
+    }
 
 
     /**
@@ -45,7 +46,8 @@ class DonController extends Controller
             'statut' => 'required',
         ]);
 
-        Don::create($request->all());
+        // Créez le don avec l'ID de l'utilisateur connecté
+        Don::create($request->all() + ['user_id' => Auth::id()]); // Modifiez cette ligne
 
         return redirect()->route('Dons.index')->with('success', 'Don créé avec succès.');
     }

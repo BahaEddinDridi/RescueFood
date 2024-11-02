@@ -3,107 +3,127 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\invertaireDonateur;
+use App\Models\InventaireDonateur; // Corrigé ici
+use App\Models\ProduitAlimentaire;
+use Illuminate\Support\Facades\Auth;
 
 class InventaireDonateurController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        $invDonateur  = invertaireDonateur::all();
-        return view ('InventaireDonateur.View',compact('invDonateur'));
+    public function index() {
+        $invDonateur = InventaireDonateur::all(); // Corrigé ici
+        $userId = Auth::id();
+        
+        return view('InventaireDonateur.View', compact('invDonateur', 'userId'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function create($userId)
     {
-        return view ('InventaireDonateur.AddInventaireDonateur');
+        return view('InventaireDonateur.AddInventaireDonateur', compact('userId'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $request->validate([
-            'nom_article' => 'required',
-            'quantité' => 'required',
-            'date_peremption' => 'required',
-            'localisation' => 'required',
+            'select_produit' => 'required|array',
+            'select_produit.*' => 'exists:produits_alimentaires,id',
         ]);
 
-        invertaireDonateur::create($request->all());
+        foreach ($request->select_produit as $produitId) {
+            $produit = ProduitAlimentaire::find($produitId);
 
-        return redirect()->route('invertaireDonateurs.index')->with('success', 'Article créé avec succès.');
+            if ($produit) {
+                InventaireDonateur::create([
+                    'nom_article' => $produit->nom,
+                    'quantité' => $produit->quantite,
+                    'date_peremption' => $produit->date_peremption,
+                    'localisation' => 'Localisation par défaut', // Utilisé le terme en français
+                ]);
+            }
+        }
+
+        return redirect()->route('invertaireDonateurs.index')->with('success', 'Produits ajoutés à l\'inventaire avec succès.');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function show($id, $userId)
     {
-        $invDonateur = invertaireDonateur::find($id);
-        return view('InventaireDonateur.showInventaireDonateur', compact('invDonateur'));
+        $invDonateur = InventaireDonateur::find($id);
+        if (!$invDonateur) {
+            return redirect()->route('invertaireDonateurs.index', ['userId' => $userId])
+                             ->with('error', 'Article non trouvé.');
+        }
+    
+        return view('InventaireDonateur.showInventaireDonateur', compact('invDonateur', 'userId'));
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    
+    
+    public function edit($id, $userId)
     {
-        $invDonateur = invertaireDonateur::find($id);
-        return view('InventaireDonateur.Edit', compact('invDonateur'));
+        $invDonateur = InventaireDonateur::find($id);
+        if (!$invDonateur) {
+            return redirect()->route('invertaireDonateurs.index', ['userId' => $userId])
+                             ->with('error', 'Article non trouvé.');
+        }
+        return view('InventaireDonateur.Edit', compact('invDonateur', 'userId'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         $request->validate([
-            'nom_article' => 'required',
-            'quantité' => 'required',
-            'date_peremption' => 'required',
-            'localisation' => 'required',
+            'nom_article' => 'required|string|max:255',
+            'quantité' => 'required|integer|min:1',
+            'date_peremption' => 'required|date',
+            'localisation' => 'required|string|max:255',
         ]);
 
-        $invDonateur = invertaireDonateur::find($id);
-        $invDonateur->update($request->all());
+        $invDonateur = InventaireDonateur::find($id);
+        if ($invDonateur) {
+            $invDonateur->update($request->all());
+            return redirect()->route('invertaireDonateurs.index')->with('success', 'Article mis à jour avec succès.');
+        }
 
-        return redirect()->route('invertaireDonateurs.index')->with('success', 'Article updated successfully.');
+        return redirect()->route('invertaireDonateurs.index')->with('error', 'Article non trouvé.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
-        invertaireDonateur::find($id)->delete();
+        $invDonateur = InventaireDonateur::find($id);
+        if ($invDonateur) {
+            $invDonateur->delete();
+            return redirect()->route('invertaireDonateurs.index')->with('success', 'Article supprimé avec succès.');
+        }
 
-        return redirect()->route('invertaireDonateurs.index')->with('success', 'Article deleted successfully.');
+        return redirect()->route('invertaireDonateurs.index')->with('error', 'Article non trouvé.');
+    }
+
+    public function getProduitsAlimentaires($userId)
+    {
+        $produitsAlimentaires = ProduitAlimentaire::where('user_id', $userId)->get();
+        return view('InventaireDonateur.AddInventaireDonateur', compact('produitsAlimentaires', 'userId'));
+    }
+
+    public function addSelectedProduits(Request $request)
+    {
+        $userId = $request->input('userId');
+    
+        $request->validate([
+            'produits' => 'required|array',
+            'produits.*' => 'exists:produits_alimentaires,id',
+        ]);
+    
+        foreach ($request->produits as $produitId) {
+            $produit = ProduitAlimentaire::find($produitId);
+    
+            if ($produit) {
+                InventaireDonateur::create([
+                    'nom_article' => $produit->nom,
+                    'quantité' => $produit->quantite,
+                    'date_peremption' => $produit->date_peremption,
+                    'localisation' => 'Localisation par défaut',
+                ]);
+            }
+        }
+    
+        return redirect()->route('invertaireDonateurs.index', ['userId' => $userId])
+                         ->with('success', 'Produits ajoutés à l\'inventaire avec succès.');
     }
 }
