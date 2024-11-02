@@ -4,8 +4,12 @@
 <div class="container-fluid p-4 mb-5 wow fadeIn" data-wow-delay="0.1s" style="margin-top: 100px;">
     <h1 class="text-center mb-5" style="color: #4A4A4A;">Inventaire Donateur</h1>
 
+    <div class="mb-3 text-center">
+        <input type="text" id="search" class="form-control w-70 mx-auto" placeholder="Rechercher un article..." onkeyup="searchTable()" style="height: 50px;">
+    </div>
+
     @if($userId)
-        <div class="mb-4 text-center">
+        <div class="mb-4">
             <a href="{{ route('invertaireDonateurs.produits', ['userId' => $userId]) }}" class="btn btn-primary" style="padding: 10px 30px; font-size: 1.25rem;">
                 Ajouter des produits
             </a>
@@ -13,10 +17,6 @@
     @else
         <p class="text-danger text-center">Aucun identifiant d'utilisateur fourni.</p>
     @endif
-
-    <div class="mb-3 text-center">
-        <input type="text" id="search" class="form-control w-50 mx-auto" placeholder="Rechercher un article..." onkeyup="searchTable()" style="height: 50px;">
-    </div>
 
     <div class="table-responsive">
         <table class="table table-bordered table-striped table-hover" id="inventoryTable">
