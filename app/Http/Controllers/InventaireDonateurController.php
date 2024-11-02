@@ -96,10 +96,11 @@ class InventaireDonateurController extends Controller
     }
 
     public function getProduitsAlimentaires($userId)
-    {
-        $produitsAlimentaires = ProduitAlimentaire::where('user_id', $userId)->get();
-        return view('InventaireDonateur.AddInventaireDonateur', compact('produitsAlimentaires', 'userId'));
-    }
+{
+    $produitsAlimentaires = ProduitAlimentaire::where('user_id', $userId)->paginate(6); // Pagination
+    return view('InventaireDonateur.AddInventaireDonateur', compact('produitsAlimentaires', 'userId'));
+}
+
 
     public function addSelectedProduits(Request $request)
     {

@@ -56,11 +56,15 @@
                 <button type="submit" class="btn btn-primary" style="padding: 10px 30px; font-size: 1.25rem;">Ajouter des Produits Sélectionnés</button>
             </div>
         </form>
+
+        <!-- Liens de pagination -->
+        <div class="d-flex justify-content-center mt-4">
+            {{ $produitsAlimentaires->links('pagination::bootstrap-4') }} 
+        </div>
     @endif
 </div>
 
 <script>
-// JavaScript pour la Recherche Dynamique
 document.getElementById('searchInput').addEventListener('keyup', function() {
     const filter = this.value.toLowerCase();
     const items = document.querySelectorAll('.card');
@@ -93,9 +97,6 @@ document.getElementById('searchInput').addEventListener('keyup', function() {
     }
     .pagination .page-item.disabled .page-link {
         color: #6c757d; 
-    }
-    .custom-container {
-        margin-top: 80px; /* Ajustez selon vos besoins */
     }
 </style>
 @endsection
