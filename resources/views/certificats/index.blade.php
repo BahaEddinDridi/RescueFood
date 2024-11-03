@@ -11,17 +11,20 @@
     </div>
 
     <div class="row">
-        @foreach($certifications as $certification)
+        @forelse($certifications as $certification)
             <div class="col-md-4 mb-4">
                 <div class="card h-100 shadow-sm">
                     <div class="card-body">
-                    <div ><i class="fas fa-award fa-3x text-warning mb-4"></i> </div>
+                        <div>
+                            <i class="fas fa-award fa-3x text-warning mb-4" alt="Icône de certification"></i>
+                        </div>
                         <h5 class="card-title">{{ $certification->nom }}</h5>
-                        <p class="card-text">{{ Str::limit($certification->description, 100) }}</p>
+                        <p class="card-text">{{ $certification->description ? Str::limit($certification->description, 100) : 'Pas de description disponible' }}</p>
                         <p class="text-muted">Date de validation: {{ \Carbon\Carbon::parse($certification->date_validation)->format('d M Y') }}</p>
                         <p class="text-muted">
                             Statut: 
-                            <span class="badge {{ $certification->statut === 'validé' ? 'bg-success' : 'bg-danger' }}">
+                            <span class="badge 
+                                {{ $certification->statut === 'validé' ? 'bg-success' : ($certification->statut === 'en attente' ? 'bg-warning' : 'bg-danger') }}">
                                 {{ ucfirst($certification->statut) }}
                             </span>
                         </p>
@@ -31,28 +34,22 @@
                         <a href="{{ route('certifications.show', $certification->id) }}" class="btn btn-outline-info rounded-pill">
                             <i class="fas fa-eye"></i> Voir
                         </a>
-                        <a href="{{ route('certifications.edit', $certification->id) }}" class="btn btn-outline-warning rounded-pill">
-                            <i class="fas fa-edit"></i> Modifier
-                        </a>
-                        <form action="{{ route('certifications.destroy', $certification->id) }}" method="POST" style="display:inline-block;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-outline-danger rounded-pill" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette certification ?');">
-                                <i class="fas fa-trash"></i> Supprimer
-                            </button>
-                        </form>
+
+                     
                     </div>
                 </div>
             </div>
-        @endforeach
-
-        @if($certifications->isEmpty())
+        @empty
             <div class="col-12">
                 <div class="alert alert-info">
                     Aucune certification disponible.
                 </div>
             </div>
-        @endif
+        @endforelse
+
+        <div class="mt-4">
+            {{ $certifications->links() }} <!-- Pagination -->
+        </div>
     </div>
 </div>
 @endsection

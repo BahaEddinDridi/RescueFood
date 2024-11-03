@@ -21,9 +21,19 @@ class ProduitAlimentaire extends Model
     ];
 
       // Relation avec le modèle Certification
-      public function certifications()
-      {
-          return $this->hasMany(Certification::class);
-      }
+    //   public function certifications()
+    //   {
+    //       return $this->hasMany(Certification::class);
+    //   }
+    public function certification()
+    {
+        return $this->hasOne(Certification::class, 'produit_id'); 
+    }
+
+        // Relation avec le modèle User
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
 }

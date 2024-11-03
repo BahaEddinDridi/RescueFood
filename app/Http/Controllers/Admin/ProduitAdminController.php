@@ -9,19 +9,18 @@ use Illuminate\Http\Request;
 class ProduitAdminController extends Controller
 {
     // Affichage des produits avec pagination
-    public function index()
-    {
-        // Récupérer les produits avec pagination
-        $produits = ProduitAlimentaire::paginate(10);
-    
-        // Statistiques
-        $totalProduits = ProduitAlimentaire::count();
-        $produitsApprouves = ProduitAlimentaire::where('approuve', true)->count();
-        $produitsEnAttente = ProduitAlimentaire::where('approuve', false)->count();
-       
-    
-        return view('admin.produits.index', compact('produits', 'totalProduits', 'produitsApprouves', 'produitsEnAttente'));
-    }
+   // Exemple d'une méthode dans votre contrôleur
+public function index()
+{
+    $produits = ProduitAlimentaire::paginate(10); // Votre logique de pagination ici
+    $totalProduits = ProduitAlimentaire::count();
+    $produitsApprouves = ProduitAlimentaire::where('approuve', true)->count();
+    $produitsRejetes = ProduitAlimentaire::where('rejeté', true)->count();
+    $produitsEnAttente = $totalProduits - $produitsApprouves - $produitsRejetes;
+
+    return view('admin.produits.index', compact('produits', 'totalProduits', 'produitsApprouves', 'produitsRejetes', 'produitsEnAttente'));
+}
+
     
 
     // Approuver un produit spécifique
@@ -33,4 +32,14 @@ class ProduitAdminController extends Controller
 
         return redirect()->back()->with('success', 'Produit approuvé avec succès.');
     }
+    public function rejeter($id)
+{
+    $produit = ProduitAlimentaire::findOrFail($id);
+    $produit->approuve = false; // Assurez-vous de définir l'état approuvé sur false
+    $produit->rejeté = true; // Définir l'état rejeté sur true
+    $produit->save();
+
+    return redirect()->back()->with('success', 'Produit rejeté avec succès.');
+}
+
 }

@@ -33,12 +33,31 @@ class ProduitAlimentaireController extends Controller
         // Récupérer le terme de recherche depuis la requête
         $query = $request->input('search');
     
-        // Filtrer les produits approuvés, avec option de recherche
-        $produitAlimentaire = ProduitAlimentaire::where('approuve', true)
-            ->when($query, function ($queryBuilder) use ($query) {
-                return $queryBuilder->where('nom', 'like', '%' . $query . '%');
-            })
-            ->get();
+        // Initialiser la requête pour les produits approuvés
+        $produitAlimentaire = ProduitAlimentaire::where('approuve', true);
+    
+        if ($query) {
+            // Séparer les paramètres de recherche par virgule
+            $searchParams = explode(',', $query);
+            
+            // Utiliser une closure pour appliquer les conditions de recherche
+            $produitAlimentaire->where(function ($queryBuilder) use ($searchParams) {
+                foreach ($searchParams as $param) {
+                    $param = trim($param);
+                    // Ajouter les conditions de recherche sur tous les attributs souhaités
+                    $queryBuilder->orWhere(function ($subQueryBuilder) use ($param) {
+                        $subQueryBuilder->where('nom', 'like', '%' . $param . '%')
+                                        ->orWhere('categorie', 'like', '%' . $param . '%')
+                                        ->orWhere('type', 'like', '%' . $param . '%')
+                                        ->orWhere('quantite', 'like', '%' . $param . '%')
+                                        ->orWhere('date_peremption', 'like', '%' . $param . '%');
+                    });
+                }
+            });
+        }
+    
+        // Récupérer les produits filtrés
+        $produitAlimentaire = $produitAlimentaire->get();
     
         return view('produitAlimentaire.index', compact('produitAlimentaire'));
     }
@@ -105,6 +124,15 @@ class ProduitAlimentaireController extends Controller
         return view('produitAlimentaire.show', compact('produitAlimentaire'));
     }
 
+    public function certification($id)
+{
+    $produitAlimentaire = ProduitAlimentaire::findOrFail($id);
+    
+    // Assuming you have a 'certification' relation or attributes on your model
+    // You might fetch the certification details from a related model or directly from the attributes
+
+    return view('produitAlimentaire.certification', compact('produitAlimentaire'));
+}
     /**
      * Show the form for editing the specified product.
      *

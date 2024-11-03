@@ -16,6 +16,10 @@
                 <strong>Approuvés</strong>
             </div>
             <div class="stat-circle">
+                <div class="circle rejected">{{ $produitsRejetes }}</div>
+                <strong>Rejetés</strong>
+            </div>
+            <div class="stat-circle">
                 <div class="circle pending">{{ $produitsEnAttente }}</div>
                 <strong>En Attente</strong>
             </div>
@@ -30,7 +34,7 @@
                     <th class="d-none d-xl-table-cell">Date de Péremption</th>
                     <th class="d-none d-xl-table-cell">Type</th>
                     <th class="d-none d-md-table-cell">Image</th>
-                    <th class="d-none d-md-table-cell">Statut</th>
+                    <th class="d-none d-md-table-cell">Créé par</th>
                     <th class="d-none d-md-table-cell">Action</th>
                 </tr>
             </thead>
@@ -49,20 +53,23 @@
                                  style="width: 50px; height: 50px; object-fit: cover;">
                         </td>
                         <td class="d-none d-md-table-cell">
-                            @if($produit->approuve)
-                                <span class="text-success">Approuvé</span>
-                            @else
-                                <span class="text-warning">En Attente</span>
-                            @endif
+                            {{ $produit->user->first_name ?? 'Inconnu' }}
                         </td>
                         <td>
                             @if($produit->approuve)
                                 <span class="text-success">Approuvé</span>
+                            @elseif($produit->rejeté)
+                                <span class="text-danger">Rejeté</span>
                             @else
                                 <form action="{{ route('admin.produitAlimentaire.approuver', $produit->id) }}" method="POST" style="display: inline;" onsubmit="return confirmApproval();">
                                     @csrf
                                     @method('PATCH')
                                     <button type="submit" class="btn btn-success btn-approve">Approuver</button>
+                                </form>
+                                <form action="{{ route('admin.produitAlimentaire.rejeter', $produit->id) }}" method="POST" style="display: inline;" onsubmit="return confirmRejection();">
+                                    @csrf
+                                    @method('PATCH')
+                                    <button type="submit" class="btn btn-danger btn-reject">Rejeter</button>
                                 </form>
                             @endif
                         </td>
@@ -117,6 +124,10 @@
 
     .approved {
         background-color: #28a745; /* Couleur pour approuvés */
+    }
+
+    .rejected {
+        background-color: #dc3545; /* Couleur pour rejetés */
     }
 
     .pending {

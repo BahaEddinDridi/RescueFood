@@ -35,7 +35,7 @@
         <i class="fas fa-download"></i> Télécharger PDF
     </a>
     <div class="text-center mt-4">
-        <a href="{{ route('certifications.index') }}" class="btn btn-outline-secondary rounded-pill">Retour à la liste</a>
+        <a href="{{ route('produitAlimentaire.index') }}" class="btn btn-outline-secondary rounded-pill">Retour à la liste</a>
     </div>
 </div>
 @endsection

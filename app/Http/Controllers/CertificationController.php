@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ProduitAlimentaire;
 use App\Models\Certification;
 use Illuminate\Http\Request;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use PDF; 
 
 class CertificationController extends Controller
@@ -84,4 +85,5 @@ class CertificationController extends Controller
         // Return the generated PDF
         return $pdf->download('certificat_' . $certification->nom . '.pdf');
     }
+
 }

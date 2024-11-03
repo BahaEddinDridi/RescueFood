@@ -23,6 +23,7 @@ use App\Http\Controllers\Admin\ProduitAdminController;
 use App\Http\Controllers\Admin\DonAdminController;
 use App\Http\Controllers\Admin\ReservationAdminController;
 use App\Http\Controllers\Admin\FeedbackAdminController;
+use App\Http\Controllers\Admin\CertificationAdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -71,9 +72,12 @@ Route::middleware('auth')->group(function () {
 Route::resource('certifications', CertificationController::class);
 Route::get('/certifications/{id}/download', [CertificationController::class, 'downloadPDF'])->name('certifications.download');
 
+Route::get('/produitAlimentaire/{id}/certification', [ProduitAlimentaireController::class, 'certification'])->name('produitAlimentaire.certification');
+
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
-    
+
+    Route::resource('certifications', CertificationAdminController::class);
     // User resource route
     Route::resource('users', UserController::class);
     
@@ -86,6 +90,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         // Définir la route d’approbation correctement
         Route::patch('produits/{id}/approuver', [ProduitAdminController::class, 'approuver'])
         ->name('produitAlimentaire.approuver');
+        Route::patch('produits/rejeter/{id}', [ProduitAdminController::class, 'rejeter'])->name('produitAlimentaire.rejeter');
+
     Route::resource('dons', DonAdminController::class);
 
     // Reservation resource route
