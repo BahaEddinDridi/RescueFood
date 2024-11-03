@@ -6,20 +6,20 @@
     <title>Certificat de Produit</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f9f9f9;
+            background-color: #f1f1f1; /* Couleur de fond douce */
         }
         .container {
-            max-width: 800px;
-            margin: 50px auto; /* Add some space from top */
+            max-width: 850px;
+            margin: 50px auto;
             border: 2px solid #D4AF37;
-            border-radius: 10px;
-            background-color: #ffffff; /* Change background to white for contrast */
+            border-radius: 15px;
+            background-color: #ffffff;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Increased shadow for depth */
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15); /* Ombre plus marquée */
         }
         .background-logo {
             position: absolute;
@@ -28,10 +28,12 @@
             right: 0;
             bottom: 0;
             z-index: 1;
-            opacity: 0.05; /* Lighter logo for subtlety */
+            opacity: 0.03; /* Logo de fond plus subtil */
             display: flex;
             justify-content: center;
             align-items: center;
+            font-size: 200px; /* Taille ajustée pour remplir l'espace */
+            color: #D4AF37; /* Couleur dorée pour harmonie */
         }
         .header {
             padding: 60px 40px;
@@ -42,61 +44,66 @@
         .header h1 {
             color: #333;
             font-weight: bold;
-            font-size: 2.5em; /* Increased size for the title */
+            font-size: 2.8em; /* Taille augmentée */
             margin-bottom: 20px;
         }
         .header h3 {
             color: #007bff;
             font-weight: bold;
-            margin-bottom: 15px; /* Added margin for spacing */
+            font-size: 1.8em;
+            margin-bottom: 15px;
         }
         .header p {
             color: #555;
             font-size: 1.2em;
-            margin: 5px 0; /* Added margin for spacing */
+            margin: 5px 0;
         }
         .badge {
-            background-color: gold;
-            color: black;
-            padding: 5px 10px;
-            border-radius: 5px;
+            background-color: #FFD700;
+            color: #333;
+            padding: 5px 15px;
+            border-radius: 10px;
             font-weight: bold;
+            display: inline-block;
+            margin-top: 10px;
         }
         .signature {
-            padding: 20px;
-            text-align: left;
-            margin-top: 40px; /* Added margin for spacing */
-            border-top: 2px solid #D4AF37; /* Added border to separate signature */
+            padding: 30px;
+            text-align: right; /* Alignement à droite */
+            margin-top: 40px;
+            border-top: 2px solid #D4AF37;
         }
         .signature p {
             font-style: italic;
             margin-bottom: 5px;
+            color: #555;
         }
         .signature img {
-            width: 150px;
+            width: 160px;
             height: auto;
+            display: inline-block;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Background Logo -->
-        <div class="background-logo center">
-            <h1 class="fw-bold text-primary m-0" style="font-size: 100px;">Res<span class="text-secondary">cueF</span>ood</h1>
+        <!-- Logo en fond -->
+        <div class="background-logo">
+            Res<span class="text-secondary">cueF</span>ood
         </div>
 
         <div class="header">
-            <h1 class="display-4 mb-4">Certificat de Produit</h1>
-            <i class="fas fa-award fa-3x text-warning mb-4"></i> <!-- Badge Icon -->
-            <hr class="my-4" style="border-top: 2px solid #D4AF37; width: 50%; margin: auto;">
+            <h1>Certificat de Produit</h1>
+            <i class="fas fa-award fa-3x text-warning mb-4"></i>
+            <hr style="border-top: 2px solid #D4AF37; width: 50%; margin: 20px auto;">
             
             <h3>{{ $certification->nom }}</h3>
             <p>Description : {{ $certification->description }}</p>
-            
+            <div class="badge">Date : {{ \Carbon\Carbon::parse($certification->date_validation)->format('d M Y') }}</div>
         </div>
 
         <div class="signature">
-            <p>Signature :</p>
+            <p>Responsable de la certification</p>
             <img src="{{ asset('img/fake_signature.png') }}" alt="Signature">
         </div>
     </div>
