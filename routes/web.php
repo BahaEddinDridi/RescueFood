@@ -6,6 +6,7 @@ use App\Http\Controllers\DemandeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\InventaireBeneficiaireController;
 use App\Http\Controllers\ProduitAlimentaireController;
+use App\Http\Controllers\CertificationController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\DonController;
@@ -22,6 +23,8 @@ use App\Http\Controllers\Admin\ProduitAdminController;
 use App\Http\Controllers\Admin\DonAdminController;
 use App\Http\Controllers\Admin\ReservationAdminController;
 use App\Http\Controllers\Admin\FeedbackAdminController;
+use App\Http\Controllers\Admin\CertificationAdminController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -66,10 +69,15 @@ Route::middleware('auth')->group(function () {
          ->name('produitAlimentaire.mesProduits');
 });
 
+Route::resource('certifications', CertificationController::class);
+Route::get('/certifications/{id}/download', [CertificationController::class, 'downloadPDF'])->name('certifications.download');
+
+Route::get('/produitAlimentaire/{id}/certification', [ProduitAlimentaireController::class, 'certification'])->name('produitAlimentaire.certification');
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
-    
+
+    Route::resource('certifications', CertificationAdminController::class);
     // User resource route
     Route::resource('users', UserController::class);
     
@@ -79,6 +87,11 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::resource('recommendations', RecommendationAdminController::class);
    
     Route::resource('produits', ProduitAdminController::class);
+        // Définir la route d’approbation correctement
+        Route::patch('produits/{id}/approuver', [ProduitAdminController::class, 'approuver'])
+        ->name('produitAlimentaire.approuver');
+        Route::patch('produits/rejeter/{id}', [ProduitAdminController::class, 'rejeter'])->name('produitAlimentaire.rejeter');
+
     Route::resource('dons', DonAdminController::class);
 
     // Reservation resource route
@@ -96,3 +109,5 @@ Route::post('/posts/{post}/like', [PostController::class, 'toggleLike'])->name('
 Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
 Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
 Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+
+

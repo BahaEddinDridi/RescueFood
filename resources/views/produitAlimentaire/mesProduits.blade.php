@@ -1,12 +1,10 @@
-
-
 @extends('layouts.app')
 
 @section('title', 'All Products')
 
 @section('content')
     <div class="p-4 mb-5" data-wow-delay="0.1s" style="margin-top: 100px;">
-        <h1>Mes produits</h1>
+        <h1 class="text-center mb-4">Mes produits</h1>
 
         <div class="d-flex justify-content-end mb-3">
             <a href="{{ route('produitAlimentaire.create') }}" class="btn btn-primary border-2 py-2 px-4 rounded-pill">
@@ -24,12 +22,12 @@
             <div class="row">
                 @foreach ($produitAlimentaire as $produit)
                     <div class="col-lg-4 col-md-6 col-sm-12 mb-4"> 
-                        <div class="card border-light shadow-sm">
+                        <div class="card border-light shadow-sm" style="border-radius: 15px;">
                             <div class="position-relative">
                                 @if (!empty($produit->image_url))
-                                    <img src="{{ asset($produit->image_url) }}" alt="{{ $produit->nom }} - Image" class="card-img-top" style="height: 200px; object-fit: cover;">
+                                    <img src="{{ asset($produit->image_url) }}" alt="{{ $produit->nom }} - Image" class="card-img-top" style="height: 200px; object-fit: cover; border-top-left-radius: 15px; border-top-right-radius: 15px;">
                                 @else
-                                    <img src="https://via.placeholder.com/300" alt="Image non disponible" class="card-img-top" style="height: 200px; object-fit: cover;">
+                                    <img src="https://via.placeholder.com/300" alt="Image non disponible" class="card-img-top" style="height: 200px; object-fit: cover; border-top-left-radius: 15px; border-top-right-radius: 15px;">
                                 @endif
                             </div>
 
@@ -41,19 +39,25 @@
                                 @if ($produit->categorie)
                                     <p class="card-text">Catégorie: {{ $produit->categorie }}</p>
                                 @endif
+                                
+                                @if (!$produit->approuve)
+                                    <div class="alert alert-warning mt-2">
+                                        Ce produit est en attente d'approbation.
+                                    </div>
+                                @endif
                             </div>
-                            <div class="card-footer d-flex justify-content-between">
-                                <a class="btn btn-outline-primary" href="{{ route('produitAlimentaire.show', $produit->id) }}">
-                                    <i class="fa fa-eye"></i> View Detail
+                            <div class="card-footer d-flex justify-content-between" style="border-radius: 0 0 15px 15px;">
+                                <a class="btn btn-outline-primary rounded-pill" href="{{ route('produitAlimentaire.show', $produit->id) }}">
+                                    <i class="fa fa-eye"></i> Voir les détails
                                 </a>
-                                <a class="btn btn-outline-warning" href="{{ route('produitAlimentaire.edit', $produit->id) }}">
-                                    <i class="fa fa-edit"></i> Edit
+                                <a class="btn btn-outline-warning rounded-pill" href="{{ route('produitAlimentaire.edit', $produit->id) }}">
+                                    <i class="fa fa-edit"></i> Éditer
                                 </a>
                                 <form action="{{ route('produitAlimentaire.destroy', $produit->id) }}" method="POST" style="display:inline-block;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" onclick="return confirm('Tu es sûr?')" title="Delete" class="btn btn-outline-danger">
-                                        <i class="fas fa-trash"></i> Delete
+                                    <button type="submit" onclick="return confirm('Tu es sûr?')" title="Supprimer" class="btn btn-outline-danger rounded-pill">
+                                        <i class="fas fa-trash"></i> Supprimer
                                     </button>
                                 </form>
                             </div>
