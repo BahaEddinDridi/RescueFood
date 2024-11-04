@@ -96,3 +96,5 @@ Route::post('/posts/{post}/like', [PostController::class, 'toggleLike'])->name('
 Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
 Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
 Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+
+Route::post('/inventaires-beneficiaires/update-localisation', [InventaireBeneficiaireController::class, 'updateLocalisation'])->name('inventaires-beneficiaires.update-localisation');

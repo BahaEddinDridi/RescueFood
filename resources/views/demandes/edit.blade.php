@@ -1,4 +1,3 @@
-<!-- resources/views/demandes/edit.blade.php -->
 @extends('layouts.app')
 
 @section('content')
@@ -13,24 +12,40 @@
         @csrf
         @method('PUT')
         
-        <div class="form-group">
-            <label for="beneficiaire_id">ID du bénéficiaire</label>
-            <input type="number" name="beneficiaire_id" class="form-control" value="{{ $demande->beneficiaire_id }}" required>
-        </div>
+        @if(Auth::user()->role === 'beneficiaire')
+            <div class="form-group">
+                <label for="beneficiaire_id">ID du bénéficiaire</label>
+                <input type="number" name="beneficiaire_id" class="form-control" value="{{ $demande->beneficiaire_id }}" required>
+            </div>
+        @else
+            <input type="hidden" name="beneficiaire_id" value="{{ $demande->beneficiaire_id }}">
+        @endif
         
         <div class="form-group">
             <label for="type_aliment">Type d'aliment</label>
-            <input type="text" name="type_aliment" class="form-control" value="{{ $demande->type_aliment }}" required>
+            @if(Auth::user()->role === 'beneficiaire')
+                <input type="text" name="type_aliment" class="form-control" value="{{ $demande->type_aliment }}" required>
+            @else
+                <input type="text" name="type_aliment" class="form-control" value="{{ $demande->type_aliment }}" readonly>
+            @endif
         </div>
         
         <div class="form-group">
             <label for="quantite">Quantité</label>
-            <input type="number" name="quantite" class="form-control" value="{{ $demande->quantite }}" required>
+            @if(Auth::user()->role === 'beneficiaire')
+                <input type="number" name="quantite" class="form-control" value="{{ $demande->quantite }}" required>
+            @else
+                <input type="number" name="quantite" class="form-control" value="{{ $demande->quantite }}" readonly>
+            @endif
         </div>
 
         <div class="form-group">
             <label for="date_demande">Date de la demande</label>
-            <input type="date" name="date_demande" class="form-control" value="{{ $demande->date_demande }}" required>
+            @if(Auth::user()->role === 'beneficiaire')
+                <input type="date" name="date_demande" class="form-control" value="{{ $demande->date_demande }}" required>
+            @else
+                <input type="date" name="date_demande" class="form-control" value="{{ $demande->date_demande }}" readonly>
+            @endif
         </div>
 
         <div class="form-group">
@@ -40,8 +55,11 @@
                 <option value="complétée" {{ $demande->statut == 'complétée' ? 'selected' : '' }}>Complétée</option>
             </select>
         </div>
-        
+        <div>
         <button type="submit" class="btn btn-primary">Mettre à jour</button>
+        <a href="{{ route('demandes.index') }}" class="btn btn-secondary">Retour</a>
+        
+        </div>
     </form>
 </div>
 </div>
