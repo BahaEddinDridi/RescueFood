@@ -27,7 +27,8 @@
                     <td class="d-none d-md-table-cell">{{ ucfirst($user->role) }}</td>
                     <td>{{ $user->created_at->format('d/m/Y') }}</td>
                     <td>
-                        <a href="{{ route('admin.users.show', $user->id) }}" class="btn btn-primary">Consulter</a>
+                        <a href="{{ route('admin.users.show', $user->id) }}" class="btn btn-primary">Consulter le profil</a>
+                        <a href="{{ route('admin.inventaireDonateur.index', $user->id) }}" class="btn btn-primary">Consulter l'inventaire</a>
                         <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-warning">Modifier</a>
                         <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" style="display: inline;">
                             @csrf

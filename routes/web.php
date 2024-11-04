@@ -25,6 +25,7 @@ use App\Http\Controllers\Admin\ReservationAdminController;
 use App\Http\Controllers\Admin\FeedbackAdminController;
 use App\Http\Controllers\Admin\CertificationAdminController;
 
+use App\Http\Controllers\Admin\InventaireDonateurAdminController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -114,6 +115,11 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         Route::patch('produits/rejeter/{id}', [ProduitAdminController::class, 'rejeter'])->name('produitAlimentaire.rejeter');
 
     Route::resource('dons', DonAdminController::class);
+
+    Route::get('inventaire-donateur/{user_id}', [InventaireDonateurAdminController::class, 'index'])->name('inventaireDonateur.index');
+    Route::get('inventaire-donateur/{id}/edit', [InventaireDonateurAdminController::class, 'edit'])->name('inventaireDonateur.edit');
+    Route::put('inventaire-donateur/{id}', [InventaireDonateurAdminController::class, 'update'])->name('inventaireDonateur.update');
+    Route::delete('inventaire-donateur/{id}', [InventaireDonateurAdminController::class, 'destroy'])->name('inventaireDonateur.destroy');
 
     // Reservation resource route
     Route::resource('reservations', ReservationAdminController::class);
