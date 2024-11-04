@@ -20,6 +20,17 @@ class Reservation extends Model
         'date_reservation' => 'datetime',
     ];
 
+    // Relation avec le modèle Don
+    public function don()
+    {
+        return $this->belongsTo(Don::class, 'don_id');
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'beneficiare_id');
+    }
+
+
     // Mutator to set default values
     protected static function boot()
     {

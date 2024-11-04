@@ -17,6 +17,12 @@ class Feedback extends Model
         'contenu_feedback',
     ];
 
+     // Définition de la relation avec User
+     public function user()
+     {
+         return $this->belongsTo(User::class);
+     }
+
     // Validation du champ type_feedback
     public function setTypeFeedbackAttribute($value)
     {

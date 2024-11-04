@@ -11,74 +11,49 @@
         <input type="text" id="searchInput" class="form-control" placeholder="Rechercher un feedback..." onkeyup="filterFeedbacks()">
     </div>
 
-    <div class="table-responsive">
-        <table class="table table-bordered table-striped table-hover">
-            <thead class="thead-dark">
-                <tr>
-                    <th>ID Utilisateur</th>
-                    <th>Type de Feedback</th>
-                    <th>Contenu du Feedback</th>
-                    <th>Date de Création</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($feedbacks as $feedback)
-                    <tr>
-                        <td>{{ $feedback->user_id }}</td>
-                        <td>{{ $feedback->type_feedback }}</td>
-                        <td>{{ $feedback->contenu_feedback }}</td>
-                        <td>{{ $feedback->created_at->format('d/m/Y H:i') }}</td>
-                        <td>
-                            <!-- Bouton Modifier -->
-                            <a href="{{ route('feedbacks.edit', $feedback->id) }}" class="btn btn-sm btn-info mb-2">
-                                <i class="fas fa-edit"></i> Modifier
-                            </a>
-
-                            <!-- Bouton Supprimer avec confirmation -->
-                            <form action="{{ route('feedbacks.destroy', $feedback->id) }}" method="POST" style="display:inline-block;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce feedback ?');">
-                                    <i class="fas fa-trash"></i> Supprimer
-                                </button>
-                            </form>
-
-                            <!--  bouton pour afficher le feedback -->
-                            <a href="{{ route('feedbacks.show', $feedback->id) }}" class="btn btn-sm btn-primary mb-2">
-                                <i class="fas fa-eye"></i> Voir Détails
-                            </a>
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
+    <div class="row" id="feedbackCards">
+        @foreach ($feedbacks as $index => $feedback)
+            <div class="col-md-4 mb-4 feedback-card">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Feedback #{{ $index + 1 }} </h5>
+                        <h6 class="card-subtitle mb-2 text-muted">Type: {{ $feedback->type_feedback }}</h6>
+                        <p class="card-text">{{ $feedback->contenu_feedback }}</p>
+                        <p class="text-muted">Créé par : {{ $feedback->user->first_name ?? 'Inconnu' }} {{ $feedback->user->last_name ?? '' }}</p> <!-- Affichage du prénom et du nom -->
+                        <p class="text-muted">Créé le : {{ $feedback->created_at->format('d/m/Y H:i') }}</p>
+                    </div>
+                    <div class="card-footer d-flex justify-content-between">
+                        <a href="{{ route('feedbacks.show', $feedback->id) }}" class="btn btn-sm btn-primary">
+                            <i class="fas fa-eye"></i> Voir Détails
+                        </a>
+                        @if (Auth::id() == $feedback->user_id) <!-- Vérification si l'utilisateur connecté est celui qui a créé le feedback -->
+                        <a href="{{ route('feedbacks.edit', $feedback->id) }}" class="btn btn-sm btn-info">
+                            <i class="fas fa-edit"></i> Modifier
+                        </a>
+                        <form action="{{ route('feedbacks.destroy', $feedback->id) }}" method="POST" style="display:inline-block;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce feedback ?');">
+                                <i class="fas fa-trash"></i> Supprimer
+                            </button>
+                        </form>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        @endforeach
     </div>
 </div>
 
 <script>
 function filterFeedbacks() {
-    let input = document.getElementById('searchInput');
-    let filter = input.value.toLowerCase();
-    let table = document.querySelector('table');
-    let tr = table.getElementsByTagName('tr');
+    let input = document.getElementById('searchInput').value.toLowerCase();
+    let cards = document.querySelectorAll('.feedback-card');
 
-    for (let i = 1; i < tr.length; i++) {
-        let tdUserId = tr[i].getElementsByTagName('td')[0];
-        let tdTypeFeedback = tr[i].getElementsByTagName('td')[1];
-        let tdContent = tr[i].getElementsByTagName('td')[2];
-        
-        if (tdUserId || tdTypeFeedback || tdContent) {
-            let textValue = (tdUserId.textContent || tdUserId.innerText) +
-                            (tdTypeFeedback.textContent || tdTypeFeedback.innerText) +
-                            (tdContent.textContent || tdContent.innerText);
-            if (textValue.toLowerCase().indexOf(filter) > -1) {
-                tr[i].style.display = "";
-            } else {
-                tr[i].style.display = "none";
-            }
-        }       
-    }
+    cards.forEach(card => {
+        let textContent = card.innerText.toLowerCase();
+        card.style.display = textContent.includes(input) ? "" : "none";
+    });
 }
 </script>
 @endsection

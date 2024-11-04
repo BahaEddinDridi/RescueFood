@@ -2,36 +2,54 @@
 
 @section('content')
 <div class="container-fluid p-4 mb-5 wow fadeIn" data-wow-delay="0.1s" style="margin-top: 100px;">
-    <div class="row">
-        <div class="col-12">
-            <h2 class="mb-4 text-center">Détails du Feedback</h2>
+    <div class="row mb-4">
+        <div class="col-12 text-center">
+            <h2>Détails du Feedback</h2>
         </div>
     </div>
 
     <div class="d-flex justify-content-center"> <!-- Centrer la carte -->
-        <div class="card" style="width: 30rem;"> <!-- Élargir la carte -->
-            <!-- Image du feedback -->
-            <img src="{{ asset('img/Feedback.png') }}" class="card-img-top" alt="Image Feedback">
+        <div class="card shadow" style="width: 35rem;"> <!-- Élargir la carte -->
+            <img src="{{ asset('img/Feedback.png') }}" class="card-img-top rounded-top" alt="Image Feedback">
 
             <div class="card-body">
-                <h5 class="card-title text-center">Type de Feedback: {{ ucfirst($feedback->type_feedback) }}</h5>
-                <p class="card-text">
-                    <strong>Contenu du Feedback :</strong><br>
-                    {{ $feedback->contenu_feedback }}
-                </p>
-            </div>
+                <h5 class="card-title text-center">Feedback </h5>
 
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item"><strong>User ID :</strong> {{ $feedback->user_id }}</li>
-                <li class="list-group-item"><strong>Date :</strong> {{ $feedback->created_at->format('d/m/Y') }}</li>
-                <li class="list-group-item"><strong>Type :</strong> {{ ucfirst($feedback->type_feedback) }}</li>
-            </ul>
+                <div class="row">
+                    <!-- Section Utilisateur -->
+                    <div class="col-12 mb-3">
+                        <div class="card border-primary">
+                            <div class="card-body">
+                                <h6 class="card-subtitle mb-2 text-primary">Utilisateur</h6>
+                                <p class="card-text">
+                                    <strong>Nom :</strong> {{ $feedback->user->first_name ?? 'Non spécifié' }} {{ $feedback->user->last_name ?? '' }}<br>
+                                    <strong>Email :</strong> {{ $feedback->user->email ?? 'Non spécifié' }}<br>
+                                    <strong>Téléphone :</strong> {{ $feedback->user->phone_number ?? 'Non spécifié' }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
 
-            <div class="card-body text-center"> <!-- Centrer les boutons -->
-                <a href="{{ route('feedbacks.index') }}" class="btn btn-primary">Retour à la Liste</a>
+                    <!-- Section Feedback -->
+                    <div class="col-12 mb-3">
+                        <div class="card border-success">
+                            <div class="card-body">
+                                <h6 class="card-subtitle mb-2 text-success">Feedback</h6>
+                                <p class="card-text">
+                                    <strong>Type de Feedback :</strong> {{ ucfirst($feedback->type_feedback) }}<br>
+                                    <strong>Contenu :</strong> {{ $feedback->contenu_feedback ?? 'Non spécifié' }}<br>
+                                    <strong>Date :</strong> {{ $feedback->created_at->format('d/m/Y H:i') }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body text-center"> <!-- Centrer le bouton -->
+                    <a href="{{ route('feedbacks.index') }}" class="btn btn-primary btn-lg">Retour à la Liste</a>
+                </div>
             </div>
         </div>
     </div>
 </div>
-
 @endsection

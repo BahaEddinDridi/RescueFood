@@ -13,31 +13,38 @@
     <!-- Formulaire d'ajout de feedback -->
     <form action="{{ route('feedbacks.store') }}" method="POST">
         @csrf <!-- Protection CSRF de Laravel -->
-        
-        <!-- ID Utilisateur -->
-        <div class="form-group mb-3">
-            <label for="user_id">ID Utilisateur</label>
-            <input type="text" name="user_id" id="user_id" class="form-control" placeholder="Entrez l'ID de l'utilisateur" required>
-        </div>
 
         <!-- Type de Feedback -->
         <div class="form-group mb-3">
             <label for="type_feedback">Type de Feedback</label>
             <select name="type_feedback" id="type_feedback" class="form-control" required>
-                <option value="don">Don</option>
-                <option value="evenement">Événement</option>
-                <option value="reservation">Réservation</option>
+                <option value="">Sélectionnez un type</option>
+                <option value="don" {{ old('type_feedback') == 'don' ? 'selected' : '' }}>Don</option>
+                <option value="evenement" {{ old('type_feedback') == 'evenement' ? 'selected' : '' }}>Événement</option>
+                <option value="reservation" {{ old('type_feedback') == 'reservation' ? 'selected' : '' }}>Réservation</option>
             </select>
+            @error('type_feedback')
+                <span class="text-danger">{{ $message }}</span>
+            @enderror
         </div>
 
         <!-- Contenu du Feedback -->
         <div class="form-group mb-3">
             <label for="contenu_feedback">Contenu du Feedback</label>
-            <textarea name="contenu_feedback" id="contenu_feedback" class="form-control" rows="5" placeholder="Entrez le contenu de votre feedback" required></textarea>
+            <textarea name="contenu_feedback" id="contenu_feedback" class="form-control" rows="5" placeholder="Entrez le contenu de votre feedback" required>{{ old('contenu_feedback') }}</textarea>
+            @error('contenu_feedback')
+                <span class="text-danger">{{ $message }}</span>
+            @enderror
         </div>
 
-        <!-- Bouton de soumission -->
-        <button type="submit" class="btn btn-primary btn-block">Ajouter le Feedback</button>
+        <div class="d-flex justify-content-between mt-4">
+                <!-- Bouton Retour à la Liste -->
+                <a href="{{ route('feedbacks.index') }}" class="btn btn-primary">Retour à la Liste</a>
+                <!-- Bouton Mettre à jour -->
+                <button type="submit" class="btn btn-success">Ajouter le Feedback</button>
+            </div>
+       
+
     </form>
 </div>
 @endsection

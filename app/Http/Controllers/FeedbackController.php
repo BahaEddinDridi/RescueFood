@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Feedback;
+use Illuminate\Support\Facades\Auth;
 
 class FeedbackController extends Controller
 {
@@ -38,12 +39,16 @@ class FeedbackController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'user_id' => 'required|integer',
             'type_feedback' => 'required|in:don,evenement,reservation', // Enumération de type_feedback
             'contenu_feedback' => 'required|string',
         ]);
 
-        Feedback::create($request->all()); // Crée un nouveau feedback
+        // Crée un nouveau feedback avec l'ID de l'utilisateur connecté
+        Feedback::create([
+            'user_id' => Auth::id(), // Récupérer l'ID de l'utilisateur connecté
+            'type_feedback' => $request->type_feedback,
+            'contenu_feedback' => $request->contenu_feedback,
+        ]);
 
         return redirect()->route('feedbacks.index')
             ->with('success', 'Feedback created successfully.');

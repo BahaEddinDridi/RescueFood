@@ -10,20 +10,29 @@
         </div>
     </div>
 
-    <!-- Formulaire d'ajout de réservation -->
-    <form action="{{ route('reservations.store') }}" method="POST">
-        @csrf <!-- Protection CSRF de Laravel -->
-        
-        <!-- Bénéficiaire ID -->
-        <div class="form-group mb-3">
-            <label for="beneficiare_id">Bénéficiaire ID</label>
-            <input type="text" name="beneficiare_id" id="beneficiare_id" class="form-control" placeholder="Entrez l'ID du bénéficiaire" required>
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
         </div>
+    @endif
 
-        <!-- Don ID -->
+    <!-- Formulaire d'ajout de réservation -->
+    <form action="{{ route('reservations.store') }}" method="POST" @if ($errors->has('no_dons')) style="pointer-events: none; opacity: 0.5;" @endif>
+        @csrf <!-- Protection CSRF de Laravel -->
+
+        <!-- Type d'Aliment -->
         <div class="form-group mb-3">
-            <label for="don_id">Don ID</label>
-            <input type="text" name="don_id" id="don_id" class="form-control" placeholder="Entrez l'ID du don" required>
+            <label for="type_aliment">Type d'Aliment</label>
+            <select name="type_aliment" id="type_aliment" class="form-control" required>
+                <option value="">Sélectionnez un type d'aliment</option>
+                @foreach ($donsDisponibles as $don)
+                    <option value="{{ $don->type_aliment }}">{{ $don->type_aliment }}</option>
+                @endforeach
+            </select>
         </div>
 
         <!-- Date de Réservation -->
@@ -32,19 +41,13 @@
             <input type="date" name="date_reservation" id="date_reservation" class="form-control" value="{{ now()->format('Y-m-d') }}" required>
         </div>
 
-        
-        <div class="form-group mb-3">
-            <label for="statut_reservation">Statut de la Réservation</label>
-            <select name="statut_reservation" id="statut_reservation" class="form-control" required>
-                <option value="en_attente">En Attente</option>
-                <option value="confirmé">Confirmé</option>
-                <option value="completé">Completé</option>
-                <option value="annulee">Annulée</option>
-            </select>
-        </div>
 
-        <!-- Bouton de soumission -->
-        <button type="submit" class="btn btn-primary btn-block">Ajouter la Réservation</button>
+          <div class="d-flex justify-content-between mt-4">
+                <!-- Bouton Retour à la Liste -->
+                <a href="{{ route('reservations.index') }}" class="btn btn-primary">Retour à la Liste</a>
+                <!-- Bouton Mettre à jour -->
+                <button type="submit" class="btn btn-success">Ajouter la Réservation</button>
+            </div>
     </form>
 </div>
 @endsection

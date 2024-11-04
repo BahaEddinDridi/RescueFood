@@ -68,6 +68,7 @@
         </li>
     </ul>
 </li>
+<a href="{{ url('/feedbacks') }}" class="nav-item nav-link">Feedbacks</a>
 
                         @else
                             @if (Route::has('login'))
