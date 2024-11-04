@@ -22,27 +22,30 @@ class InventaireDonateurController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $request->validate([
-            'select_produit' => 'required|array',
-            'select_produit.*' => 'exists:produits_alimentaires,id',
-        ]);
+{
+    $request->validate([
+        'select_produit' => 'required|array',
+        'select_produit.*' => 'exists:produits_alimentaires,id',
+    ]);
 
-        foreach ($request->select_produit as $produitId) {
-            $produit = ProduitAlimentaire::find($produitId);
+    $userId = Auth::id(); // Obtenez l'ID de l'utilisateur connecté
 
-            if ($produit) {
-                InventaireDonateur::create([
-                    'nom_article' => $produit->nom,
-                    'quantité' => $produit->quantite,
-                    'date_peremption' => $produit->date_peremption,
-                    'localisation' => 'Localisation par défaut', // Utilisé le terme en français
-                ]);
-            }
+    foreach ($request->select_produit as $produitId) {
+        $produit = ProduitAlimentaire::find($produitId);
+
+        if ($produit) {
+            InventaireDonateur::create([
+                'nom_article' => $produit->nom,
+                'quantité' => $produit->quantite,
+                'date_peremption' => $produit->date_peremption,
+                'localisation' => 'Localisation par défaut',
+                'user_id' => $userId, // Ajoutez l'ID de l'utilisateur ici
+            ]);
         }
-
-        return redirect()->route('invertaireDonateurs.index')->with('success', 'Produits ajoutés à l\'inventaire avec succès.');
     }
+
+    return redirect()->route('invertaireDonateurs.index')->with('success', 'Produits ajoutés à l\'inventaire avec succès.');
+}
 
     public function show($id, $userId)
     {
@@ -102,29 +105,31 @@ class InventaireDonateurController extends Controller
 }
 
 
-    public function addSelectedProduits(Request $request)
-    {
-        $userId = $request->input('userId');
-    
-        $request->validate([
-            'produits' => 'required|array',
-            'produits.*' => 'exists:produits_alimentaires,id',
-        ]);
-    
-        foreach ($request->produits as $produitId) {
-            $produit = ProduitAlimentaire::find($produitId);
-    
-            if ($produit) {
-                InventaireDonateur::create([
-                    'nom_article' => $produit->nom,
-                    'quantité' => $produit->quantite,
-                    'date_peremption' => $produit->date_peremption,
-                    'localisation' => 'Localisation par défaut',
-                ]);
-            }
+public function addSelectedProduits(Request $request)
+{
+    $userId = Auth::id(); // Obtenez l'ID de l'utilisateur connecté
+
+    $request->validate([
+        'produits' => 'required|array',
+        'produits.*' => 'exists:produits_alimentaires,id',
+    ]);
+
+    foreach ($request->produits as $produitId) {
+        $produit = ProduitAlimentaire::find($produitId);
+
+        if ($produit) {
+            InventaireDonateur::create([
+                'nom_article' => $produit->nom,
+                'quantité' => $produit->quantite,
+                'date_peremption' => $produit->date_peremption,
+                'localisation' => 'Localisation par défaut',
+                'user_id' => $userId, // Ajoutez l'ID de l'utilisateur ici
+            ]);
         }
-    
-        return redirect()->route('invertaireDonateurs.index', ['userId' => $userId])
-                         ->with('success', 'Produits ajoutés à l\'inventaire avec succès.');
     }
+
+    return redirect()->route('invertaireDonateurs.index', ['userId' => $userId])
+                     ->with('success', 'Produits ajoutés à l\'inventaire avec succès.');
+}
+
 }

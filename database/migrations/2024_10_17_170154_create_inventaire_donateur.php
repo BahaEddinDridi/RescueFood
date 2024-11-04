@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('inventaire_donateur', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string("nom_article");
             $table->integer('quantité');
             $table->date('date_peremption'); 
