@@ -50,9 +50,24 @@
                     <div class="navbar-nav ms-auto p-4 p-lg-0">
                         @auth
                             <a href="{{ url('/reservations') }}" class="nav-item nav-link active">Reservations</a>
-                            <a href="{{ url('/demandes') }}" class="nav-item nav-link">Demandes</a>
+                            <a href="{{ url('/demandes') }}" class="nav-item nav-link">
+                                @if(Auth::user()->role === 'beneficiaire')
+                                   Mes Demandes
+                                @else
+                                   Toutes les Demandes
+                                @endif
+                            </a>
                             <a href="{{ url('/Dons') }}" class="nav-item nav-link">Dons</a>
-                            <a href="{{ url('/invertaireDonateurs') }}" class="nav-item nav-link">Inventaire Donateur</a>
+                            <a href="{{ url('/invertaireDonateurs') }}" class="nav-item nav-link">
+                            @if(Auth::user()->role === 'donateur')
+                            Inventaire Donateur
+                            @endif
+                            </a>
+                            <a href="{{ url('/inventaires-beneficiaires') }}" class="nav-item nav-link">
+                                @if(Auth::user()->role === 'beneficiaire')
+                                 Inventaires-beneficiaires
+                                @endif
+                            </a>
                             <a href="{{ url('/notifications') }}" class="nav-item nav-link">Notifications</a>
                 <a href="{{ url('/recommendations') }}" class="nav-item nav-link">Recommendations</a>
                 <a href="{{ url('/events') }}" class="nav-item nav-link">Events</a>
