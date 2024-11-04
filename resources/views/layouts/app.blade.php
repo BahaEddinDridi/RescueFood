@@ -57,7 +57,13 @@
                                    Toutes les Demandes
                                 @endif
                             </a>
-                            <a href="{{ url('/Dons') }}" class="nav-item nav-link">Dons</a>
+                            
+                            <a href="{{ url('/Dons') }}" class="nav-item nav-link">
+                                @if(Auth::user()->role === 'donateur')
+                                Dons
+                                @endif
+                            </a>
+                            
                             <a href="{{ url('/invertaireDonateurs') }}" class="nav-item nav-link">
                             @if(Auth::user()->role === 'donateur')
                             Inventaire Donateur
