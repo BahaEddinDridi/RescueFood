@@ -111,4 +111,28 @@ class DonController extends Controller
 
         return redirect()->route('Dons.index')->with('success', 'Don deleted successfully.');
     }
+
+
+    public function getStatistiques()
+    {
+        $userId = Auth::id();
+        
+        // Donations statistics
+        $totalDons = Don::where('user_id', $userId)->count();
+        $donsRecuperes = Don::where('user_id', $userId)->where('statut', 'récupéré')->count();
+        $donsDisponibles = Don::where('user_id', $userId)->where('statut', 'disponible')->count();
+    
+        // Expiration statistics
+        $donsExpires = Don::where('user_id', $userId)->where('date_peremption', '<', now())->count();
+        $donsNonExpires = Don::where('user_id', $userId)->where('date_peremption', '>=', now())->count();
+        
+        // Calcul des pourcentages
+        $pourcentageRecuperes = $totalDons > 0 ? ($donsRecuperes / $totalDons) * 100 : 0;
+        $pourcentageDisponibles = $totalDons > 0 ? ($donsDisponibles / $totalDons) * 100 : 0;
+        
+        return view('Don.Statistiques', compact('pourcentageRecuperes', 'pourcentageDisponibles', 'donsExpires', 'donsNonExpires'));
+    }
+    
+    
+
 }

@@ -13,10 +13,14 @@
         </div>
     </div>
 
-    <!-- Bouton Ajouter un Don -->
-    <div class="mb-4 d-flex justify-content-end">
+    
+<!-- Boutons "Ajouter un Don" et "Voir les Statistiques" -->
+<div class="mb-4 d-flex justify-content-between">
         <a class="btn btn-primary btn-lg shadow" href="{{ route('Dons.create') }}" style="font-size: 1.25em; padding: 15px 30px; border-radius: 50px;">
             <i class="fas fa-plus-circle mr-2"></i> Ajouter un Don
+        </a>
+        <a class="btn btn-info btn-lg shadow" href="{{ route('dons.statistiques') }}" style="font-size: 1.25em; padding: 15px 30px; border-radius: 50px;">
+            <i class="fas fa-chart-bar mr-2"></i> Voir les Statistiques
         </a>
     </div>
     

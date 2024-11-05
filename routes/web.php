@@ -58,12 +58,15 @@ Route::get('/invertaireDonateurs/produits/{userId}', [InventaireDonateurControll
 Route::post('/invertaireDonateurs/addSelectedProduits', [InventaireDonateurController::class, 'addSelectedProduits'])
     ->name('invertaireDonateurs.addSelectedProduits');
 
-    Route::get('invertaireDonateurs/detail/{id}/{userId}', [InventaireDonateurController::class, 'show'])
+Route::get('invertaireDonateurs/detail/{id}/{userId}', [InventaireDonateurController::class, 'show'])
     ->name('invertaireDonateurs.show');
 
 
-    Route::get('invertaireDonateurs/edit/{id}/{userId}', [InventaireDonateurController::class, 'edit'])
+Route::get('invertaireDonateurs/edit/{id}/{userId}', [InventaireDonateurController::class, 'edit'])
     ->name('invertaireDonateurs.edit');
+
+Route::get('/dons/statistiques', [DonController::class, 'getStatistiques'])
+    ->name('dons.statistiques');
 
 
 
