@@ -15,6 +15,6 @@ class Don extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class); // Assurez-vous que le modèle User est correctement importé
+        return $this->belongsTo(User::class); 
     }
 }
