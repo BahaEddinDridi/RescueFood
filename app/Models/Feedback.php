@@ -15,6 +15,7 @@ class Feedback extends Model
         'user_id',
         'type_feedback',
         'contenu_feedback',
+        'rating',
     ];
 
      // Définition de la relation avec User

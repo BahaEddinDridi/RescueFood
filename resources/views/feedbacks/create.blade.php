@@ -10,9 +10,8 @@
         </div>
     </div>
 
-    <!-- Formulaire d'ajout de feedback -->
     <form action="{{ route('feedbacks.store') }}" method="POST">
-        @csrf <!-- Protection CSRF de Laravel -->
+        @csrf
 
         <!-- Type de Feedback -->
         <div class="form-group mb-3">
@@ -37,14 +36,43 @@
             @enderror
         </div>
 
-        <div class="d-flex justify-content-between mt-4">
-                <!-- Bouton Retour à la Liste -->
-                <a href="{{ route('feedbacks.index') }}" class="btn btn-primary">Retour à la Liste</a>
-                <!-- Bouton Mettre à jour -->
-                <button type="submit" class="btn btn-success">Ajouter le Feedback</button>
+        <!-- Note en étoiles -->
+        <div class="form-group mb-3">
+            <label for="rating">Note :</label>
+            <div id="star-rating" class="d-flex">
+                @for ($i = 1; $i <= 5; $i++)
+                    <i class="star fa fa-star" data-value="{{ $i }}" style="font-size: 24px; cursor: pointer; color: #ccc;"></i>
+                @endfor
             </div>
-       
+            <input type="hidden" name="rating" id="rating" value="{{ old('rating', 0) }}">
+            @error('rating')
+                <span class="text-danger">{{ $message }}</span>
+            @enderror
+        </div>
 
+        <div class="d-flex justify-content-between mt-4">
+            <a href="{{ route('feedbacks.index') }}" class="btn btn-primary">Retour à la Liste</a>
+            <button type="submit" class="btn btn-success">Ajouter le Feedback</button>
+        </div>
     </form>
 </div>
+
+<script>
+   document.addEventListener('DOMContentLoaded', function () {
+    const stars = document.querySelectorAll('#star-rating .star');
+    const ratingInput = document.getElementById('rating');
+
+    stars.forEach(star => {
+        star.addEventListener('click', function () {
+            const ratingValue = this.getAttribute('data-value');
+            ratingInput.value = ratingValue;
+
+            stars.forEach(s => s.style.color = '#ccc');
+            for (let i = 0; i < ratingValue; i++) {
+                stars[i].style.color = '#FFD700'; // Changer la couleur des étoiles sélectionnées
+            }
+        });
+    });
+});
+</script>
 @endsection

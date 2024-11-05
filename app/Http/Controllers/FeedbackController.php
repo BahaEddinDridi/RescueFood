@@ -39,8 +39,13 @@ class FeedbackController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'type_feedback' => 'required|in:don,evenement,reservation', // Enumération de type_feedback
+            'type_feedback' => 'required|in:don,evenement,reservation',
             'contenu_feedback' => 'required|string',
+            'rating' => 'required|integer|min:1|max:5',
+        ], [
+            'type_feedback.required' => 'Le type de feedback est obligatoire.',
+            'contenu_feedback.required' => 'Le contenu du feedback est obligatoire.',
+            'rating.required' => 'Veuillez sélectionner une note !',
         ]);
 
         // Crée un nouveau feedback avec l'ID de l'utilisateur connecté
@@ -48,6 +53,7 @@ class FeedbackController extends Controller
             'user_id' => Auth::id(), // Récupérer l'ID de l'utilisateur connecté
             'type_feedback' => $request->type_feedback,
             'contenu_feedback' => $request->contenu_feedback,
+            'rating' => $request->rating,
         ]);
 
         return redirect()->route('feedbacks.index')
@@ -90,11 +96,14 @@ class FeedbackController extends Controller
         $request->validate([
             'type_feedback' => 'required|in:don,evenement,reservation', 
             'contenu_feedback' => 'required|string',
+            'rating' => 'required|integer|min:1|max:5', // Ajoutez cette ligne pour valider la note
         ]);
-
+    
         $feedback = Feedback::findOrFail($id);
-        $feedback->update($request->only(['type_feedback', 'contenu_feedback']));  
-
+        
+        // Mettez à jour les champs 'type_feedback', 'contenu_feedback' et 'rating'
+        $feedback->update($request->only(['type_feedback', 'contenu_feedback', 'rating']));  
+    
         return redirect()->route('feedbacks.index')
             ->with('success', 'Feedback updated successfully.');
     }

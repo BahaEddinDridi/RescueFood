@@ -38,7 +38,13 @@
                                 <p class="card-text">
                                     <strong>Type de Feedback :</strong> {{ ucfirst($feedback->type_feedback) }}<br>
                                     <strong>Contenu :</strong> {{ $feedback->contenu_feedback ?? 'Non spécifié' }}<br>
-                                    <strong>Date :</strong> {{ $feedback->created_at->format('d/m/Y H:i') }}
+                                    <strong>Date :</strong> {{ $feedback->created_at->format('d/m/Y H:i') }}<br>
+                                    <strong>Note :</strong>
+                                    <div id="star-rating" class="d-flex">
+                                        @for ($i = 1; $i <= 5; $i++)
+                                            <i class="star fa fa-star {{ $i <= $feedback->rating ? 'text-warning' : 'text-muted' }}" style="font-size: 24px;"></i>
+                                        @endfor
+                                    </div>
                                 </p>
                             </div>
                         </div>
