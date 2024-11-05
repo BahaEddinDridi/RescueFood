@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 use App\Models\Demande;
 use Illuminate\Http\Request;
-
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 class DemandeController extends Controller
 {
     /**
@@ -11,9 +12,29 @@ class DemandeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $demandes = Demande::all(); 
+        $query = Demande::query();
+
+        if (Auth::user()->role === 'donateur') {
+            // Donateurs voient toutes les demandes
+            if ($request->has('statut')) {
+                // Si des statuts sont sélectionnés, filtrer selon ces statuts
+                $query->whereIn('statut', $request->input('statut'));
+            }
+        } else {
+            // Bénéficiaires voient seulement leurs propres demandes
+            $query->where('beneficiaire_id', Auth::id());
+    
+            if ($request->has('statut')) {
+                // Si des statuts sont sélectionnés, filtrer selon ces statuts
+                $query->whereIn('statut', $request->input('statut'));
+            }
+        }
+    
+        // Récupérer toutes les demandes si aucune case à cocher n'est sélectionnée
+        $demandes = $query->get();
+    
         return view('demandes.index', compact('demandes'));
     }
 
@@ -24,7 +45,9 @@ class DemandeController extends Controller
      */
     public function create()
     {
-        return view('demandes.create');
+        // Récupère uniquement les utilisateurs avec le rôle 'bénéficiaire'
+        $beneficiaries = User::where('role', 'beneficiaire')->get();
+        return view('demandes.create', compact('beneficiaries'));
     }
 
     /**
@@ -36,14 +59,23 @@ class DemandeController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'beneficiaire_id' => 'required',
-            'type_aliment' => 'required',
-            'quantite' => 'required|integer',
+            'type_aliment' => 'required|regex:/^[A-Za-z\s]+$/', // Accepts only letters and spaces
+            'quantite' => 'required|integer|min:1',
             'date_demande' => 'required|date',
-            'statut' => 'required',
+            'statut' => 'required|string',
         ]);
-    
-        Demande::create($validated); 
+
+        $demande = new Demande($validated);
+        
+        // Associe automatiquement le bénéficiaire à la demande
+        if (Auth::user()->role === 'beneficiaire') {
+            $demande->beneficiaire_id = Auth::id();
+        } else {
+            $demande->beneficiaire_id = $request->beneficiaire_id; // pour donateur
+        }
+
+        $demande->save();
+        
         return redirect()->route('demandes.index')->with('success', 'Demande créée avec succès');
     }
 

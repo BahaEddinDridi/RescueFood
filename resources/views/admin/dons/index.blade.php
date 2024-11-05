@@ -2,35 +2,52 @@
 
 @section('content')
 <div class="container">
-    <div class="card flex-fill">
-        <table class="table table-hover my-0">
-            <thead>
+    <h1>Liste des Dons</h1>
+
+    <!-- Bouton pour créer un nouveau don -->
+    <a href="{{ route('admin.dons.create') }}" class="btn btn-success mb-3">Ajouter un Don</a>
+
+    <!-- Liste des dons avec options de modification et de suppression -->
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Type d'Aliment</th>
+                <th>Quantité</th>
+                <th>Date de Péremption</th>
+                <th>Date du Don</th>
+                <th>Statut</th>
+                <th>Utilisateur</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($don as $item)
                 <tr>
-                    <th class="d-none d-xl-table-cell">Date du don</th>
-                    <th class="d-none d-xl-table-cell">Date de préremption</th>
-                    <th class="d-none d-xl-table-cell">Type de l'aliment</th>
-                    <th class="d-none d-xl-table-cell">Quantité</th>
-                    <th class="d-none d-md-table-cell">Statut</th>
-                    <th class="d-none d-md-table-cell">Actions</th>
+                    <td>{{ $item->id }}</td>
+                    <td>{{ $item->type_aliment }}</td>
+                    <td>{{ $item->quantité }}</td>
+                    <td>{{ $item->date_peremption }}</td>
+                    <td>{{ $item->date_don }}</td>
+                    <td>{{ $item->statut }}</td>
+                    <td>{{ $item->user->id ?? 'Utilisateur inconnu' }}</td>
+                    <td>
+                        <!-- Bouton pour modifier le don -->
+                        <a href="{{ route('admin.dons.edit', $item->id) }}" class="btn btn-warning">Modifier</a>
+                        
+                        <!-- Formulaire pour supprimer le don -->
+                        <form action="{{ route('admin.dons.destroy', $item->id) }}" method="POST" style="display:inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce don ?')">Supprimer</button>
+                        </form>
+                    </td>
                 </tr>
-            </thead>
-            <tbody>
-                @foreach($don as $item)
-                    <tr>
-                        <td class="d-none d-xl-table-cell">
-                            {{ \Carbon\Carbon::parse($item->date_don)->format('d/m/Y') }}
-                        </td>
-                        <td class="d-none d-xl-table-cell">
-                            {{ \Carbon\Carbon::parse($item->date_peremption)->format('d/m/Y') }}
-                        </td>
-                        <td class="d-none d-xl-table-cell">{{ $item->type_aliment }}</td>
-                        <td class="d-none d-xl-table-cell">{{ $item->quantité }}</td>
-                        <td class="d-none d-xl-table-cell">{{ $item->statut }}</td>
-                      
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
+            @endforeach
+        </tbody>
+    </table>
+
+    <!-- Pagination -->
+    {{ $don->links() }}
 </div>
 @endsection

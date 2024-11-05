@@ -3,7 +3,8 @@
 @section('content')
 <div class="p-4 mb-5" data-wow-delay="0.1s" style="margin-top: 100px;">
     <h1 class="text-center">Modifier le produit</h1>
-
+    <div class="row justify-content-center">
+    <div class="col-md-8">
     <form action="{{ route('produitAlimentaire.update', $produitAlimentaire->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
@@ -68,7 +69,7 @@
         
         <button type="submit" class="btn btn-outline-primary border-2 py-2 px-4 mt-3 rounded-pill">Mettre à jour le produit</button>
     </form>
-
+</div></div>
     @if(session('success'))
         <div class="alert alert-success mt-3">
             {{ session('success') }}

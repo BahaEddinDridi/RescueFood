@@ -34,6 +34,11 @@
                     <i class="align-middle" data-feather="shopping-cart"></i> <span class="align-middle">Produits</span>
                 </a>
             </li>
+            <li class="sidebar-item {{ Route::currentRouteName() == 'admin.certifications.index' ? 'active' : '' }}">
+                <a class="sidebar-link" href="{{ route('admin.certifications.index') }}">
+                    <i class="align-middle" data-feather="award"></i> <span class="align-middle">Certifications</span>
+                </a>
+            </li>
             <li class="sidebar-item ">
                 <a class="sidebar-link" href="{{ route('admin.users.index') }}">
                     <i class="align-middle" data-feather="edit"></i> <span class="align-middle">Publications</span>
