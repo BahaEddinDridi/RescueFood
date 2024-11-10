@@ -45,7 +45,7 @@ Route::resource('recommendations', RecommendationController::class);
 Route::resource('events', EventController::class);
 Route::resource('feedbacks', FeedbackController::class);
 Route::resource('Dons', DonController::class);
-
+Route::get('events/{event}/generate-description', [EventController::class, 'generateDescription'])->name('events.generateDescription');
 
 
 

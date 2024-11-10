@@ -1,17 +1,23 @@
 {
     "private": true,
     "scripts": {
-        "dev": "vite",
+        "dev": "concurrently \"vite\" \"node app.js\"",
         "build": "vite build"
     },
     "devDependencies": {
         "@popperjs/core": "^2.11.6",
         "axios": "^1.1.2",
         "bootstrap": "^5.3.3",
+        "concurrently": "^9.1.0",
         "laravel-vite-plugin": "^0.7.2",
         "lodash": "^4.17.19",
         "postcss": "^8.1.14",
         "sass": "^1.56.1",
         "vite": "^4.0.0"
+    },
+    "dependencies": {
+        "cors": "^2.8.5",
+        "express": "^4.21.1",
+        "groq-sdk": "^0.7.0"
     }
 }

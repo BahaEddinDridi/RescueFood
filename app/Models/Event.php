@@ -15,6 +15,7 @@ class Event extends Model
         'date',
         'location',
         'partner_id', // Foreign key for the partner
+        'generated_description',
     ];
 
     /**

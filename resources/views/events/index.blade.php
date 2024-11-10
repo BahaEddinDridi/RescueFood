@@ -30,6 +30,9 @@
                             <a href="{{ route('events.edit', $event->id) }}" class="btn btn-sm btn-info mb-2">
                                 <i class="fas fa-edit"></i> Modifier
                             </a>
+                            <a href="{{ route('events.show', $event->id) }}" class="btn btn-sm btn-secondary mb-2">
+                                <i class="fas fa-magic"></i> Generate Description
+                            </a>
                             <form action="{{ route('events.destroy', $event->id) }}" method="POST" style="display:inline-block;">
                                 @csrf
                                 @method('DELETE')
