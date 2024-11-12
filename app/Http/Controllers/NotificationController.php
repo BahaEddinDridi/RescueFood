@@ -14,7 +14,7 @@ class NotificationController extends Controller
      */
     public function index()
     {
-        $notifications = Notification::all();
+        $notifications = Notification::orderBy('created_at', 'desc')->get();
         return view('notifications.index', compact('notifications'));
     }
 
@@ -89,5 +89,11 @@ class NotificationController extends Controller
     {
         $notification->delete();
         return redirect()->route('notifications.index')->with('success', 'Notification deleted successfully.');
+    }
+    public function markAsSeen(Notification $notification)
+    {
+        $notification->update(['est_vu' => true]);
+
+        return redirect()->route('notifications.index');
     }
 }

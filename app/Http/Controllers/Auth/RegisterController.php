@@ -70,7 +70,7 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        $user = User::create([
             'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
             'email' => $data['email'],
@@ -82,5 +82,14 @@ class RegisterController extends Controller
             'association_name' => $data['association_name'] ?? null,
             'city' => $data['city'] ?? null,
         ]);
+        User::where('role', 'admin')->get()->each(function ($admin) use ($user) {
+            $admin->notifications()->create([
+                'titre' => 'Nouvel utilisateur inscrit',
+                'message' => 'Un nouvel utilisateur s\'est inscrit : ' . $user->first_name . ' ' . $user->last_name,
+                'type' => 'new_registration',
+                'est_vu' => false,
+            ]);
+        });
+        return $user;
     }
 }

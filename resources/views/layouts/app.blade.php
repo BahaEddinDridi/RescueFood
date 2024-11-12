@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,8 +15,9 @@
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500&family=Lora:wght@600;700&display=swap" rel="stylesheet"> 
-     
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500&family=Lora:wght@600;700&display=swap"
+        rel="stylesheet">
+
     <!-- Icon Font Stylesheet -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
@@ -31,6 +33,7 @@
     <!-- Scripts -->
     <script src="{{ asset('js/bootstrap.bundle.min.js') }}" defer></script>
 </head>
+
 <body>
     <div id="app">
         <!-- Navbar Start -->
@@ -42,7 +45,8 @@
                 <a href="{{ url('/home') }}" class="navbar-brand ms-4 ms-lg-0">
                     <h1 class="fw-bold text-primary m-0">Res<span class="text-secondary">cueF</span>ood</h1>
                 </a>
-                <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse"
+                    data-bs-target="#navbarCollapse">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
@@ -51,76 +55,83 @@
                         @auth
                             <a href="{{ url('/reservations') }}" class="nav-item nav-link active">Reservations</a>
                             <a href="{{ url('/demandes') }}" class="nav-item nav-link">
-                                @if(Auth::user()->role === 'beneficiaire')
-                                   Mes Demandes
+                                @if (Auth::user()->role === 'beneficiaire')
+                                    Mes Demandes
                                 @else
-                                   Toutes les Demandes
+                                    Les Demandes
                                 @endif
                             </a>
-                            
-                            <a href="{{ url('/Dons') }}" class="nav-item nav-link">
-                                @if(Auth::user()->role === 'donateur')
-                                Dons
-                                @endif
-                            </a>
-                            
-                            <a href="{{ url('/invertaireDonateurs') }}" class="nav-item nav-link">
-                            @if(Auth::user()->role === 'donateur')
-                            Inventaire Donateur
-                            @endif
-                            </a>
-                            <a href="{{ url('/inventaires-beneficiaires') }}" class="nav-item nav-link">
-                                @if(Auth::user()->role === 'beneficiaire')
-                                 Inventaires-beneficiaires
-                                @endif
-                            </a>
-                            <a href="{{ url('/notifications') }}" class="nav-item nav-link">Notifications</a>
-                <a href="{{ url('/recommendations') }}" class="nav-item nav-link">Recommendations</a>
-                <a href="{{ url('/events') }}" class="nav-item nav-link">Events</a>
-                            <li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-        Produits
-    </a>
-    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-        <li>
-            <a class="dropdown-item" href="{{ url('/produitAlimentaire') }}">Tous les Produits</a>
-        </li>
-        <li>
-            <a class="dropdown-item" href="{{ route('produitAlimentaire.mesProduits') }}">Mes Produits</a>
-        </li>
-    </ul>
-</li>
-<a href="{{ url('/feedbacks') }}" class="nav-item nav-link">Feedbacks</a>
 
-                        @else
-                            @if (Route::has('login'))
-                                <a href="{{ route('login') }}" class="nav-item nav-link">Login</a>
+                            <a href="{{ url('/Dons') }}" class="nav-item nav-link">
+                                @if (Auth::user()->role === 'donateur')
+                                    Dons
+                                @endif
+                            </a>
+                            @if (Auth::user()->role === 'donateur')
+                            <a href="{{ url('/invertaireDonateurs') }}" class="nav-item nav-link">
+                                    Mon inventaire
+                            </a>
                             @endif
-                            @if (Route::has('register'))
-                                <a href="{{ route('register') }}" class="nav-item nav-link">Register</a>
+                            @if (Auth::user()->role === 'beneficiaire')
+                            <a href="{{ url('/inventaires-beneficiaires') }}" class="nav-item nav-link">
+                                    Mon inventaire
+                            </a>
                             @endif
-                        @endauth
-                    </div>
-                    
-                    @auth
-                        <div class="d-none d-lg-flex ms-2">
-                            <a class="btn-sm-square bg-white rounded-circle ms-3" href="#">
-                                <small class="fa fa-search text-body"></small>
-                            </a>
-                            <a class="btn-sm-square bg-white rounded-circle ms-3" href="{{ route('profile.edit') }}">
-                                <small class="fa fa-user text-body"></small>
-                            </a>
-                            <a class="btn-sm-square bg-white rounded-circle ms-3" href="#">
-                                <small class="fa fa-shopping-bag text-body"></small>
-                            </a>
-                        </div>
+                            <a href="{{ url('/recommendations') }}" class="nav-item nav-link">Recommendations</a>
+                            <a href="{{ url('/events') }}" class="nav-item nav-link">Events</a>
+                            <li class="nav-item dropdown">
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                    Produits
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{{ url('/produitAlimentaire') }}">Tous les Produits</a>
+                                    <a class="dropdown-item" href="{{ route('produitAlimentaire.mesProduits') }}">Mes Produits</a>
+                                </div>
+                            </li>
+                            </li>
+                            <a href="{{ url('/feedbacks') }}" class="nav-item nav-link">Feedbacks</a>
+                            <li class="nav-item dropdown">
+                            @else
+                                @if (Route::has('login'))
+                                    <a href="{{ route('login') }}" class="nav-item nav-link">Login</a>
+                                @endif
+                                @if (Route::has('register'))
+                                    <a href="{{ route('register') }}" class="nav-item nav-link">Register</a>
+                                @endif
+                            @endauth
+                            @auth
+                            <li class="nav-item dropdown">
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                                   data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <small class="fa fa-bell text-body"></small>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                    <!-- Notifications List -->
+                                    @foreach(auth()->user()->notifications as $notification)
+                                        <a class="dropdown-item" href="#">
+                                            <strong>{{ $notification->titre }}</strong><br>
+                                            <small>{{ $notification->message }}</small>
+                                        </a>
+                                        
+                                        <!-- Divider between notifications -->
+                                        <div class="dropdown-divider" style="border-top: 1px solid #e9ecef; margin: 0.5rem 0;"></div>
+                                    @endforeach
+                            
+                                    <!-- View All Notifications Link -->
+                                    <a class="dropdown-item text-center" href="{{ url('/notifications') }}">See All Notifications</a>
+                                </div>
+                            </li>
+                            
                         <li class="nav-item dropdown">
-                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                <small class="fa fa-user text-body"></small>
                                 {{ Auth::user()->first_name }}
                             </a>
                             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="{{ route('logout') }}"
-                                   onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                     Logout
                                 </a>
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
@@ -129,6 +140,9 @@
                             </div>
                         </li>
                     @endauth
+                    </div>
+
+                    
                 </div>
             </nav>
         </div>
@@ -144,12 +158,17 @@
                 <div class="row g-5">
                     <div class="col-lg-3 col-md-6">
                         <h1 class="fw-bold text-primary mb-4">F<span class="text-secondary">oo</span>dy</h1>
-                        <p>Diam dolor diam ipsum sit. Aliqu diam amet diam et eos. Clita erat ipsum et lorem et sit, sed stet lorem sit clita</p>
+                        <p>Diam dolor diam ipsum sit. Aliqu diam amet diam et eos. Clita erat ipsum et lorem et sit, sed
+                            stet lorem sit clita</p>
                         <div class="d-flex pt-2">
-                            <a class="btn btn-square btn-outline-light rounded-circle me-1" href=""><i class="fab fa-twitter"></i></a>
-                            <a class="btn btn-square btn-outline-light rounded-circle me-1" href=""><i class="fab fa-facebook-f"></i></a>
-                            <a class="btn btn-square btn-outline-light rounded-circle me-1" href=""><i class="fab fa-youtube"></i></a>
-                            <a class="btn btn-square btn-outline-light rounded-circle me-0" href=""><i class="fab fa-linkedin-in"></i></a>
+                            <a class="btn btn-square btn-outline-light rounded-circle me-1" href=""><i
+                                    class="fab fa-twitter"></i></a>
+                            <a class="btn btn-square btn-outline-light rounded-circle me-1" href=""><i
+                                    class="fab fa-facebook-f"></i></a>
+                            <a class="btn btn-square btn-outline-light rounded-circle me-1" href=""><i
+                                    class="fab fa-youtube"></i></a>
+                            <a class="btn btn-square btn-outline-light rounded-circle me-0" href=""><i
+                                    class="fab fa-linkedin-in"></i></a>
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-6">
@@ -170,8 +189,10 @@
                         <h4 class="text-light mb-4">Newsletter</h4>
                         <p>Dolor amet sit justo amet elitr clita ipsum elitr est.</p>
                         <div class="position-relative mx-auto" style="max-width: 400px;">
-                            <input class="form-control bg-transparent w-100 py-3 ps-4 pe-5" type="text" placeholder="Your email">
-                            <button type="button" class="btn btn-primary py-2 position-absolute top-0 end-0 mt-2 me-2">SignUp</button>
+                            <input class="form-control bg-transparent w-100 py-3 ps-4 pe-5" type="text"
+                                placeholder="Your email">
+                            <button type="button"
+                                class="btn btn-primary py-2 position-absolute top-0 end-0 mt-2 me-2">SignUp</button>
                         </div>
                     </div>
                 </div>
@@ -193,17 +214,19 @@
         <!-- Footer End -->
 
     </div>
-    <a href="#" class="btn btn-lg btn-primary btn-lg-square rounded-circle back-to-top"><i class="bi bi-arrow-up"></i></a>
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square rounded-circle back-to-top"><i
+            class="bi bi-arrow-up"></i></a>
 
-<!-- JavaScript Libraries -->
-<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="{{ asset('lib/wow/wow.min.js') }}"></script>
-<script src="{{ asset('lib/easing/easing.min.js') }}"></script>
-<script src="{{ asset('lib/waypoints/waypoints.min.js') }}"></script>
-<script src="{{ asset('lib/owlcarousel/owl.carousel.min.js') }}"></script>
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ asset('lib/wow/wow.min.js') }}"></script>
+    <script src="{{ asset('lib/easing/easing.min.js') }}"></script>
+    <script src="{{ asset('lib/waypoints/waypoints.min.js') }}"></script>
+    <script src="{{ asset('lib/owlcarousel/owl.carousel.min.js') }}"></script>
 
-<!-- Template Javascript -->
-<script src="{{ asset('js/main.js') }}"></script>
+    <!-- Template Javascript -->
+    <script src="{{ asset('js/main.js') }}"></script>
 </body>
+
 </html>

@@ -16,7 +16,7 @@ class PostController extends Controller
     public function index()
     {
         $posts = Post::with('user')->orderBy('created_at', 'desc')->get();
-    return view('posts.index', compact('posts'));
+        return view('posts.index', compact('posts'));
     }
 
     /**
@@ -41,7 +41,7 @@ class PostController extends Controller
             'titre' => 'required',
             'contenu' => 'required',
             'type_post' => 'required',
-            'image_url' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', 
+            'image_url' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $imagePath = null;
@@ -50,19 +50,19 @@ class PostController extends Controller
             $image = $request->file('image_url');
             $imageName = time() . '.' . $image->getClientOriginalExtension();
 
-          
+
             $imagePath = $image->storeAs('public/images', $imageName);
 
-          
+
             $imagePath = str_replace('public/', 'storage/', $imagePath);
         }
 
-        
+
         Auth::user()->posts()->create([
             'titre' => $request->input('titre'),
             'contenu' => $request->input('contenu'),
             'type_post' => $request->input('type_post'),
-            'image_url' => $imagePath,  
+            'image_url' => $imagePath,
         ]);
 
         return redirect()->route('home')->with('success', 'Publication créée avec succès.');
@@ -78,7 +78,7 @@ class PostController extends Controller
     public function show($id)
     {
         // Fetch post with its associated user
-        $post = Post::with('user')->find($id);
+        $post = Post::with('user', 'comments.user')->find($id);
         return view('posts.show', compact('post'));
     }
 
@@ -145,20 +145,59 @@ class PostController extends Controller
     }
 
     public function toggleLike($id)
-{
-    $post = Post::findOrFail($id);
+    {
+        $post = Post::findOrFail($id);
+        $user = auth()->user();
 
-    $like = $post->likes()->where('user_id', auth()->id())->first();
+       
+        $like = $post->likes()->where('user_id', $user->id)->first();
 
-    if ($like) {
-        $like->delete(); 
-    } else {
-        $post->likes()->create([
-            'user_id' => auth()->id(),
-        ]);
+        if ($like) {
+          
+            $like->delete();
+        } else {
+            $post->likes()->create([
+                'user_id' => $user->id,
+            ]);
+
+           
+            $postOwner = $post->user;
+            if ($postOwner->id !== $user->id) {
+                $postOwner->notifications()->create([
+                    'titre' => 'Nouveau like',
+                    'message' => "{$user->getFullNameAttribute()} a aimé votre publication.",
+                    'type' => 'like',
+                    'est_vu' => false,
+                ]);
+            }
+        }
+
+        return back();
     }
 
-    return back();
-}
+    public function storeComment(Request $request, $postId)
+    {
+        $request->validate([
+            'contenu' => 'required|string|max:1000',
+        ]);
+
+        $post = Post::findOrFail($postId);
+
+        $post->comments()->create([
+            'user_id' => auth()->id(),
+            'contenu' => $request->input('contenu'),
+        ]);
+
+        $postOwner = $post->user;
+        if ($postOwner->id !== auth()->id()) {
+            $postOwner->notifications()->create([
+                'titre' => 'Nouveau commentaire',
+                'message' => auth()->user()->getFullNameAttribute() . ' a commenté votre publication.',
+                'type' => 'comment',
+                'est_vu' => false,
+            ]);
+        }
+        return back()->with('success', 'Comment added successfully.');
+    }
 
 }

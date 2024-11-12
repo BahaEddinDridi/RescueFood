@@ -107,4 +107,5 @@ class UserController extends Controller
         User::findOrFail($id)->delete();
         return redirect()->route('admin.users.index');
     }
+  
 }

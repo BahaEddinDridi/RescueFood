@@ -39,8 +39,8 @@
                     <i class="align-middle" data-feather="award"></i> <span class="align-middle">Certifications</span>
                 </a>
             </li>
-            <li class="sidebar-item ">
-                <a class="sidebar-link" href="{{ route('admin.users.index') }}">
+            <li class="sidebar-item {{ Route::currentRouteName() == 'admin.posts.index' ? 'active' : '' }}">
+                <a class="sidebar-link" href="{{ route('admin.posts.index') }}">
                     <i class="align-middle" data-feather="edit"></i> <span class="align-middle">Publications</span>
                 </a>
             </li>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\PublicationAdminController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\DemandeController;
@@ -91,7 +92,7 @@ Route::get('/test', function () {
 Route::resource('produitAlimentaire', ProduitAlimentaireController::class)->middleware('auth');
 Route::middleware('auth')->group(function () {
     Route::get('/mesProduits', [ProduitAlimentaireController::class, 'mesProduits'])
-         ->name('produitAlimentaire.mesProduits');
+        ->name('produitAlimentaire.mesProduits');
 });
 
 Route::resource('certifications', CertificationController::class);
@@ -101,21 +102,24 @@ Route::get('/produitAlimentaire/{id}/certification', [ProduitAlimentaireControll
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
+    Route::get('/notifications', [AdminController::class, 'showAdminNotifications'])->name('notifications');
 
     Route::resource('certifications', CertificationAdminController::class);
     // User resource route
     Route::resource('users', UserController::class);
-    
+
     // Demande resource route
     Route::resource('demandes', DemandeAdminController::class);
+    Route::resource('posts', PublicationAdminController::class);
     Route::resource('events', EventAdminController::class);
     Route::resource('recommendations', RecommendationAdminController::class);
-   
+    Route::get('/admin/posts/{post}', [PublicationAdminController::class, 'show'])->name('admin.posts.show');
+
     Route::resource('produits', ProduitAdminController::class);
-        // Définir la route d’approbation correctement
-        Route::patch('produits/{id}/approuver', [ProduitAdminController::class, 'approuver'])
+    // Définir la route d’approbation correctement
+    Route::patch('produits/{id}/approuver', [ProduitAdminController::class, 'approuver'])
         ->name('produitAlimentaire.approuver');
-        Route::patch('produits/rejeter/{id}', [ProduitAdminController::class, 'rejeter'])->name('produitAlimentaire.rejeter');
+    Route::patch('produits/rejeter/{id}', [ProduitAdminController::class, 'rejeter'])->name('produitAlimentaire.rejeter');
 
     Route::resource('dons', DonAdminController::class);
 
@@ -136,8 +140,10 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::post('/posts/{post}/like', [PostController::class, 'toggleLike'])->name('posts.like');
+Route::post('/posts/{post}/comments', [PostController::class, 'storeComment'])->name('posts.comment');
 Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
 Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
 Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+Route::post('/notifications/{notification}/mark-as-seen', [NotificationController::class, 'markAsSeen'])->name('notifications.markAsSeen');
 
 Route::post('/inventaires-beneficiaires/update-localisation', [InventaireBeneficiaireController::class, 'updateLocalisation'])->name('inventaires-beneficiaires.update-localisation');

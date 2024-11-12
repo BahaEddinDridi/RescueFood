@@ -14,5 +14,10 @@ class Notification extends Model
         'message',
         'type',
         'est_vu'
-        ];
+    ];
+
+    public function notifiable()
+    {
+        return $this->morphTo();
+    }
 }
